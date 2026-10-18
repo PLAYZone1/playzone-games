@@ -2,107 +2,490 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PlayZone Games | ألعاب مجانية</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#10111b">
+<meta name="description" content="PlayZone Games - العب ألعابًا مجانية وممتعة مباشرة من هاتفك.">
+<title>PlayZone Games | عالم الألعاب</title>
+
 <style>
+:root{
+  --bg:#10111b;
+  --panel:#191b2a;
+  --card:#202337;
+  --green:#54f5a7;
+  --purple:#9c7bff;
+  --text:#f6f7ff;
+  --muted:#a5a9c1;
+}
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#101827;color:white}
-header{background:#17243a;padding:22px 15px;text-align:center}
-header h1{color:#38e8b5;margin:0;font-size:30px}
-header p{color:#cbd5e1}
-nav{background:#22334d;padding:13px;text-align:center}
-nav a{color:white;text-decoration:none;margin:0 12px}
-.container{max-width:950px;margin:25px auto;padding:15px}
-.welcome{background:#1c2b42;padding:25px;border-radius:15px;text-align:center}
-.welcome h2{color:#38e8b5}
-.games{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;margin-top:22px}
-.card{background:#1c2b42;border-radius:15px;padding:20px;text-align:center}
-.card .icon{font-size:55px}
-button{background:#38e8b5;color:#101827;border:0;padding:12px 22px;border-radius:9px;font-size:16px;font-weight:bold;cursor:pointer}
-button:hover{background:#20c997}
-#game{display:none;background:#1c2b42;padding:20px;border-radius:15px;text-align:center;margin-top:20px}
-#goal{font-size:65px;margin:20px}
-footer{text-align:center;padding:25px;color:#aab6c8}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Arial,sans-serif;
+}
+button,input{font:inherit}
+button{cursor:pointer}
+header{
+  background:var(--panel);
+  padding:17px 20px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  position:sticky;
+  top:0;
+  z-index:10;
+  border-bottom:1px solid #303248;
+}
+.logo{
+  font-size:23px;
+  font-weight:bold;
+  white-space:nowrap;
+}
+.logo span{color:var(--green)}
+.search{
+  width:100%;
+  max-width:380px;
+  background:var(--bg);
+  border:1px solid #383b55;
+  border-radius:10px;
+  color:white;
+  padding:12px;
+  outline:none;
+}
+.layout{
+  display:flex;
+  min-height:calc(100vh - 70px);
+}
+aside{
+  width:205px;
+  flex-shrink:0;
+  background:var(--panel);
+  padding:20px 12px;
+  border-left:1px solid #303248;
+}
+.menu-title{
+  color:var(--muted);
+  font-size:12px;
+  padding:12px;
+}
+.menu{
+  display:block;
+  width:100%;
+  text-align:right;
+  background:transparent;
+  border:0;
+  color:#d5d8ec;
+  padding:13px;
+  border-radius:9px;
+  margin-bottom:5px;
+}
+.menu:hover,.menu.active{
+  background:#303149;
+  color:var(--green);
+}
+main{
+  flex:1;
+  min-width:0;
+  padding:25px;
+  max-width:1200px;
+}
+.hero{
+  padding:35px 25px;
+  border-radius:20px;
+  background:linear-gradient(120deg,#29234f,#17443d);
+  margin-bottom:30px;
+}
+.hero h1{font-size:clamp(25px,4vw,39px);margin:0 0 12px}
+.hero p{color:#e0e4f6;line-height:1.8}
+.primary{
+  background:var(--green);
+  color:#10111b;
+  border:0;
+  border-radius:9px;
+  padding:12px 20px;
+  font-weight:bold;
+}
+h2{font-size:22px}
+.games{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+  gap:18px;
+}
+.card{
+  background:var(--card);
+  border:1px solid #30334c;
+  border-radius:16px;
+  padding:20px;
+  text-align:center;
+  transition:transform .2s,border-color .2s;
+}
+.card:hover{
+  transform:translateY(-4px);
+  border-color:var(--green);
+}
+.icon{font-size:58px;margin:10px}
+.card h3{margin:10px 0}
+.card p{color:var(--muted);font-size:14px;line-height:1.7}
+.tag{
+  display:inline-block;
+  color:var(--green);
+  background:#173d34;
+  padding:5px 10px;
+  border-radius:20px;
+  font-size:12px;
+  margin-bottom:12px;
+}
+.play{
+  width:100%;
+  background:var(--purple);
+  color:white;
+  border:0;
+  padding:11px;
+  border-radius:9px;
+  font-weight:bold;
+}
+.panel{
+  background:var(--panel);
+  border:1px solid #30334c;
+  border-radius:16px;
+  padding:22px;
+  margin-top:25px;
+  line-height:1.9;
+}
+.hidden{display:none!important}
+.gamebox{
+  background:var(--card);
+  border-radius:15px;
+  padding:20px;
+  text-align:center;
+  margin-top:20px;
+}
+.gamebox button{
+  margin:5px;
+  border:0;
+  border-radius:8px;
+  padding:12px 16px;
+  background:var(--green);
+  color:#10111b;
+  font-weight:bold;
+}
+.gamebox input{
+  padding:12px;
+  border-radius:8px;
+  border:1px solid #454963;
+  background:var(--bg);
+  color:white;
+  width:130px;
+  max-width:100%;
+}
+#reactionArea{
+  min-height:150px;
+  display:grid;
+  place-items:center;
+  border-radius:12px;
+  background:#7d2942;
+  margin:15px 0;
+  font-size:22px;
+  font-weight:bold;
+  padding:15px;
+  cursor:pointer;
+}
+footer{
+  padding:25px;
+  text-align:center;
+  color:var(--muted);
+  border-top:1px solid #303248;
+  margin-top:35px;
+  line-height:2;
+}
+footer button{
+  background:none;
+  border:0;
+  color:var(--green);
+  padding:5px;
+}
+@media(max-width:650px){
+  header{flex-wrap:wrap}
+  .search{max-width:none;order:2}
+  .layout{display:block}
+  aside{
+    width:100%;
+    display:flex;
+    gap:5px;
+    overflow-x:auto;
+    padding:10px;
+    border-left:0;
+    border-bottom:1px solid #303248;
+  }
+  .menu-title{display:none}
+  .menu{
+    white-space:nowrap;
+    width:auto;
+    margin:0;
+    padding:10px;
+  }
+  main{padding:16px}
+  .hero{padding:25px 18px}
+  .games{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .card{padding:12px}
+  .icon{font-size:43px}
+}
+@media(max-width:350px){
+  .games{grid-template-columns:1fr}
+}
 </style>
 </head>
+
 <body>
+
 <header>
-<h1>🎮 PlayZone Games</h1>
-<p>العب واستمتع بألعاب مجانية!</p>
+  <div class="logo">🎮 PlayZone <span>Games</span></div>
+  <input class="search" id="search" placeholder="🔎 ابحث عن لعبة..." aria-label="البحث عن لعبة">
 </header>
-<nav>
-<a href="#home">الرئيسية</a>
-<a href="#games">الألعاب</a>
-<a href="#about">عن الموقع</a>
-</nav>
-<main class="container" id="home">
-<section class="welcome">
-<h2>أهلاً بك في عالم الألعاب!</h2>
-<p>اكتشف ألعابًا ممتعة والعب مباشرة من هاتفك.</p>
-<button onclick="document.getElementById('games').scrollIntoView({behavior:'smooth'})">اكتشف الألعاب</button>
+
+<div class="layout">
+
+<aside>
+  <div>
+    <div class="menu-title">القائمة الرئيسية</div>
+    <button class="menu active" data-category="all">🏠 الرئيسية</button>
+    <button class="menu" data-category="sports">⚽ رياضة</button>
+    <button class="menu" data-category="brain">🧠 ذكاء</button>
+    <button class="menu" data-category="action">⚡ سرعة</button>
+    <button class="menu" id="aboutButton">ℹ️ من نحن</button>
+    <button class="menu" id="privacyButton">🔒 الخصوصية</button>
+    <button class="menu" id="contactButton">📩 اتصل بنا</button>
+  </div>
+</aside>
+
+<main id="main">
+
+<section class="hero">
+  <h1>أهلاً بك في عالم الألعاب! 🎮</h1>
+  <p>اكتشف ألعابًا مجانية، اختبر مهاراتك، وحاول تحطيم أرقامك القياسية.</p>
+  <button class="primary" onclick="document.getElementById('gamesTitle').scrollIntoView({behavior:'smooth'})">
+    اكتشف الألعاب ←
+  </button>
 </section>
-<section id="games">
-<h2>🎯 ألعابنا</h2>
-<div class="games">
-<div class="card">
-<div class="icon">⚽</div>
-<h3>تحدي ضربات الجزاء</h3>
-<p>اختر اتجاه التسديد وحاول تسجيل الأهداف!</p>
-<button onclick="startGame()">العب الآن</button>
+
+<h2 id="gamesTitle">🔥 اكتشف ألعابنا</h2>
+
+<div class="games" id="games">
+
+  <article class="card" data-category="sports" data-name="ضربات الجزاء كرة القدم">
+    <div class="icon">⚽</div>
+    <span class="tag">رياضة</span>
+    <h3>ضربات الجزاء</h3>
+    <p>اختر اتجاه التسديد وحاول تسجيل أكبر عدد من الأهداف.</p>
+    <button class="play" onclick="openGame('penalty')">العب الآن</button>
+  </article>
+
+  <article class="card" data-category="brain" data-name="تخمين الأرقام ذكاء">
+    <div class="icon">🧠</div>
+    <span class="tag">ذكاء</span>
+    <h3>تخمين الرقم</h3>
+    <p>هل تستطيع معرفة الرقم السري في أقل عدد من المحاولات؟</p>
+    <button class="play" onclick="openGame('guess')">العب الآن</button>
+  </article>
+
+  <article class="card" data-category="action" data-name="سرعة رد الفعل تحدي">
+    <div class="icon">⚡</div>
+    <span class="tag">سرعة</span>
+    <h3>سرعة رد الفعل</h3>
+    <p>اختبر سرعة استجابتك وحاول تحقيق أفضل نتيجة.</p>
+    <button class="play" onclick="openGame('reaction')">العب الآن</button>
+  </article>
+
 </div>
-<div class="card">
-<div class="icon">🧠</div>
-<h3>ألعاب قادمة</h3>
-<p>نعمل على إضافة المزيد من الألعاب قريبًا.</p>
+
+<div id="gameArea" class="gamebox hidden">
+  <button onclick="closeGame()">✖ إغلاق اللعبة</button>
+
+  <div id="penalty" class="hidden">
+    <h2>⚽ تحدي ضربات الجزاء</h2>
+    <p id="penaltyScore">الأهداف: 0 | المحاولات: 0 من 5</p>
+    <div style="font-size:65px">🥅</div>
+    <p>اختر اتجاه تسديد الكرة:</p>
+    <button onclick="shoot('يسار')">⬅️ يسار</button>
+    <button onclick="shoot('وسط')">⬆️ وسط</button>
+    <button onclick="shoot('يمين')">يمين ➡️</button>
+    <h3 id="penaltyResult">هل ستسجل هدفًا؟</h3>
+    <button onclick="resetPenalty()">إعادة اللعب</button>
+  </div>
+
+  <div id="guess" class="hidden">
+    <h2>🧠 تخمين الرقم</h2>
+    <p>اختر رقمًا من 1 إلى 100.</p>
+    <input type="number" id="guessInput" min="1" max="100" placeholder="اكتب الرقم">
+    <button onclick="makeGuess()">تخمين</button>
+    <p id="guessResult">لديك 7 محاولات.</p>
+    <button onclick="resetGuess()">لعبة جديدة</button>
+  </div>
+
+  <div id="reaction" class="hidden">
+    <h2>⚡ سرعة رد الفعل</h2>
+    <p>اضغط ابدأ، وانتظر حتى يتحول المربع إلى اللون الأخضر، ثم اضغط عليه بسرعة.</p>
+    <button onclick="startReaction()">ابدأ التحدي</button>
+    <div id="reactionArea" onclick="tapReaction()">اضغط ابدأ أولًا</div>
+    <p id="reactionResult">كم تبلغ سرعة رد فعلك؟</p>
+  </div>
 </div>
-</div>
-<div id="game">
-<h2>⚽ تحدي ضربات الجزاء</h2>
-<p id="score">الأهداف: 0 | المحاولات: 0</p>
-<div id="goal">🥅</div>
-<p>اختر اتجاه التسديد:</p>
-<button onclick="shoot('يسار')">⬅️ يسار</button>
-<button onclick="shoot('وسط')">⬆️ وسط</button>
-<button onclick="shoot('يمين')">يمين ➡️</button>
-<h3 id="result">هل ستسجل هدفًا؟</h3>
-<button onclick="resetGame()">إعادة اللعب</button>
-</div>
+
+<section id="info" class="panel hidden">
+  <h2 id="infoTitle"></h2>
+  <div id="infoText"></div>
 </section>
-<section id="about">
-<h2>عن PlayZone Games</h2>
-<p>موقع ترفيهي يهدف إلى توفير ألعاب مجانية وسهلة الاستخدام على الهاتف والكمبيوتر.</p>
-</section>
+
+<footer>
+  <p>© 2026 PlayZone Games — جميع الحقوق محفوظة.</p>
+  <button onclick="showInfo('about')">من نحن</button> |
+  <button onclick="showInfo('privacy')">سياسة الخصوصية</button> |
+  <button onclick="showInfo('contact')">اتصل بنا</button>
+</footer>
+
 </main>
-<footer>© 2026 PlayZone Games — جميع الحقوق محفوظة</footer>
+</div>
+
 <script>
+const search = document.getElementById('search');
+const cards = [...document.querySelectorAll('.card')];
+let category = 'all';
+
+function filterGames(){
+  const term = search.value.trim().toLowerCase();
+  cards.forEach(card=>{
+    const matchesCategory = category==='all' || card.dataset.category===category;
+    const matchesSearch = (card.dataset.name+' '+card.innerText).toLowerCase().includes(term);
+    card.style.display = matchesCategory && matchesSearch ? '' : 'none';
+  });
+}
+search.addEventListener('input',filterGames);
+
+document.querySelectorAll('[data-category]').forEach(button=>{
+  button.addEventListener('click',()=>{
+    category=button.dataset.category;
+    document.querySelectorAll('.menu[data-category]').forEach(b=>b.classList.remove('active'));
+    button.classList.add('active');
+    filterGames();
+    closeGame();
+    document.getElementById('gamesTitle').scrollIntoView({behavior:'smooth'});
+  });
+});
+
+function openGame(name){
+  document.getElementById('gameArea').classList.remove('hidden');
+  ['penalty','guess','reaction'].forEach(id=>document.getElementById(id).classList.add('hidden'));
+  document.getElementById(name).classList.remove('hidden');
+  document.getElementById('info').classList.add('hidden');
+  document.getElementById('gameArea').scrollIntoView({behavior:'smooth'});
+}
+function closeGame(){
+  document.getElementById('gameArea').classList.add('hidden');
+}
+
 let goals=0, attempts=0;
-function startGame(){
-document.getElementById('game').style.display='block';
-document.getElementById('game').scrollIntoView({behavior:'smooth'});
-}
 function shoot(direction){
-if(attempts>=5){
-document.getElementById('result').textContent='انتهت المحاولات! اضغط إعادة اللعب.';
-return;
+  if(attempts>=5)return;
+  attempts++;
+  const keeper=['يسار','وسط','يمين'][Math.floor(Math.random()*3)];
+  if(direction!==keeper){
+    goals++;
+    document.getElementById('penaltyResult').textContent='🎉 هدف رائع!';
+  }else{
+    document.getElementById('penaltyResult').textContent='🧤 تصدى الحارس للكرة!';
+  }
+  document.getElementById('penaltyScore').textContent=`الأهداف: ${goals} | المحاولات: ${attempts} من 5`;
+  if(attempts===5)document.getElementById('penaltyResult').textContent+=` النتيجة النهائية: ${goals} من 5`;
 }
-attempts++;
-let keeper=['يسار','وسط','يمين'][Math.floor(Math.random()*3)];
-if(direction!==keeper){
-goals++;
-document.getElementById('result').textContent='🎉 هدف رائع!';
-}else{
-document.getElementById('result').textContent='🧤 تصدى الحارس للكرة!';
+function resetPenalty(){
+  goals=0;attempts=0;
+  document.getElementById('penaltyScore').textContent='الأهداف: 0 | المحاولات: 0 من 5';
+  document.getElementById('penaltyResult').textContent='هل ستسجل هدفًا؟';
 }
-document.getElementById('score').textContent='الأهداف: '+goals+' | المحاولات: '+attempts;
-if(attempts===5){
-document.getElementById('result').textContent+=' النتيجة النهائية: '+goals+' من 5';
+
+let secret=0, guesses=0, finished=false;
+function resetGuess(){
+  secret=Math.floor(Math.random()*100)+1;
+  guesses=0;finished=false;
+  document.getElementById('guessInput').value='';
+  document.getElementById('guessResult').textContent='لديك 7 محاولات.';
 }
+function makeGuess(){
+  if(finished)return;
+  const input=document.getElementById('guessInput');
+  const n=Number(input.value);
+  if(!input.value || !Number.isInteger(n) || n<1 || n>100){
+    document.getElementById('guessResult').textContent='أدخل رقمًا صحيحًا من 1 إلى 100.';
+    return;
+  }
+  guesses++;
+  if(n===secret){
+    document.getElementById('guessResult').textContent=`🎉 أحسنت! عرفت الرقم في ${guesses} محاولة.`;
+    finished=true;
+  }else if(guesses>=7){
+    document.getElementById('guessResult').textContent=`انتهت المحاولات! الرقم هو ${secret}.`;
+    finished=true;
+  }else{
+    document.getElementById('guessResult').textContent=(n<secret?'⬆️ الرقم أكبر':'⬇️ الرقم أصغر')+` — تبقى ${7-guesses} محاولات.`;
+  }
 }
-function resetGame(){
-goals=0;attempts=0;
-document.getElementById('score').textContent='الأهداف: 0 | المحاولات: 0';
-document.getElementById('result').textContent='هل ستسجل هدفًا؟';
+resetGuess();
+
+let reactionTimer=null, reactionReady=false, reactionStart=0;
+function startReaction(){
+  clearTimeout(reactionTimer);
+  reactionReady=false;
+  const area=document.getElementById('reactionArea');
+  area.style.background='#7d2942';
+  area.textContent='انتظر اللون الأخضر...';
+  document.getElementById('reactionResult').textContent='لا تضغط قبل تغيّر اللون!';
+  reactionTimer=setTimeout(()=>{
+    reactionReady=true;
+    reactionStart=performance.now();
+    area.style.background='#16834d';
+    area.textContent='اضغط الآن!';
+  },1500+Math.random()*3500);
 }
+function tapReaction(){
+  const area=document.getElementById('reactionArea');
+  if(!reactionTimer && !reactionReady){
+    document.getElementById('reactionResult').textContent='اضغط ابدأ أولًا.';
+    return;
+  }
+  if(!reactionReady){
+    clearTimeout(reactionTimer);
+    reactionTimer=null;
+    area.style.background='#7d2942';
+    area.textContent='ضغطت مبكرًا!';
+    document.getElementById('reactionResult').textContent='😅 حاول مرة أخرى وانتظر اللون الأخضر.';
+    return;
+  }
+  const ms=Math.round(performance.now()-reactionStart);
+  reactionReady=false;reactionTimer=null;
+  area.textContent='انتهى التحدي!';
+  document.getElementById('reactionResult').textContent=`⚡ زمن رد فعلك: ${ms} مللي ثانية.`;
+}
+
+function showInfo(type){
+  closeGame();
+  const info=document.getElementById('info');
+  const title=document.getElementById('infoTitle');
+  const text=document.getElementById('infoText');
+  const content={
+    about:['من نحن','PlayZone Games هو مشروع ألعاب ترفيهي يهدف إلى تقديم ألعاب بسيطة ومجانية تعمل مباشرة من المتصفح. نسعى إلى تطوير ألعاب جديدة وتحسين تجربة اللاعبين.'],
+    privacy:['سياسة الخصوصية','يحترم PlayZone Games خصوصية الزوار. لا يطلب الموقع في نسخته الحالية إنشاء حساب أو إدخال بيانات شخصية للعب. إذا أضفنا إعلانات أو أدوات تحليل مستقبلًا، فسنحدّث هذه السياسة ونوضح كيفية التعامل مع البيانات.'],
+    contact:['اتصل بنا','للتواصل أو إرسال اقتراحات حول الألعاب، يمكنك إنشاء بريد إلكتروني مخصص للموقع وإضافته هنا. لم يتم إعداد نموذج إرسال رسائل فعلي في هذه النسخة.']
+  };
+  title.textContent=content[type][0];
+  text.textContent=content[type][1];
+  info.classList.remove('hidden');
+  info.scrollIntoView({behavior:'smooth'});
+}
+document.getElementById('aboutButton').onclick=()=>showInfo('about');
+document.getElementById('privacyButton').onclick=()=>showInfo('privacy');
+document.getElementById('contactButton').onclick=()=>showInfo('contact');
 </script>
 </body>
 </html>
