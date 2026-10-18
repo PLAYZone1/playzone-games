@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>عجلة الحظ 🎡 | PlayZone Games</title>
+<style>
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  background: #10131c;
+  color: white;
+  text-align: center;
+}
+.container {
+  max-width: 600px;
+  margin: auto;
+}
+h1 {
+  color: #39e879;
+}
+.description {
+  color: #cbd5e1;
+  line-height: 1.8;
+}
+.wheel-container {
+  position: relative;
+  width: min(85vw, 380px);
+  margin: 30px auto 20px;
+}
+canvas {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.pointer {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 18px solid transparent;
+  border-right: 18px solid transparent;
+  border-top: 35px solid white;
+  z-index: 2;
+}
+input {
+  width: 100%;
+  padding: 14px;
+  margin: 8px 0;
+  border-radius: 10px;
+  border: 1px solid #374151;
+  background: #1c2230;
+  color: white;
+  font-size: 16px;
+}
+button {
+  padding: 12px 18px;
+  margin: 5px;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.add-btn {
+  background: #39e879;
+  color: #10131c;
+}
+.spin-btn {
+  width: 100%;
+  padding: 16px;
+  background: #39e879;
+  color: #10131c;
+  font-size: 20px;
+}
+.clear-btn {
+  background: #374151;
+  color: white;
+}
+#result {
+  margin: 20px 0;
+  font-size: 24px;
+  font-weight: bold;
+  color: #39e879;
+  overflow-wrap: anywhere;
+}
+.names-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 15px;
+}
+.name-item {
+  background: #242b3a;
+  border: 1px solid #374151;
+  padding: 8px 12px;
+  border-radius: 20px;
+  overflow-wrap: anywhere;
+}
+.name-item button {
+  background: #ef4444;
+  color: white;
+  padding: 3px 7px;
+  margin: 0 0 0 5px;
+  font-size: 12px;
+}
+footer {
+  margin-top: 35px;
+  color: #94a3b8;
+  font-size: 13px;
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>🎡 عجلة الحظ</h1>
+  <p class="description">
+    أضف أسماء أصدقائك إلى العجلة، ثم اضغط على زر التدوير
+    لمعرفة الاسم الذي ستختاره العجلة عشوائيًا!
+  </p>
+  <div class="wheel-container">
+    <div class="pointer"></div>
+    <canvas id="wheel" width="700" height="700"></canvas>
+  </div>
+  <button id="spinBtn" class="spin-btn">🎯 دوّر العجلة!</button>
+  <div id="result" aria-live="polite">أضف الأسماء وابدأ اللعب!</div>
+  <h3>✍️ أضف اسمًا جديدًا</h3>
+  <input
+    id="nameInput"
+    type="text"
+    maxlength="50"
+    placeholder="اكتب اسم الشخص هنا..."
+    autocomplete="off"
+  >
+  <button id="addBtn" class="add-btn">➕ إضافة الاسم</button>
+  <button id="clearBtn" class="clear-btn">🗑️ حذف جميع الأسماء</button>
+  <h3>📋 الأسماء الموجودة في العجلة</h3>
+  <div id="namesList" class="names-list"></div>
+  <footer>
+    © PlayZone Games — استمتع باللعب!
+  </footer>
+</div>
+<script>
+const canvas = document.getElementById("wheel");
+const ctx = canvas.getContext("2d");
+const nameInput = document.getElementById("nameInput");
+const namesList = document.getElementById("namesList");
+const result = document.getElementById("result");
+const spinBtn = document.getElementById("spinBtn");
+let names = [];
+let angle = 0;
+let spinning = false;
+const colors = [
+  "#ef4444",
+  "#f97316",
+  "#eab308",
+  "#22c55e",
+  "#06b6d4",
+  "#3b82f6",
+  "#8b5cf6",
+  "#ec4899",
+  "#14b8a6",
+  "#f43f5e"
+];
+function drawWheel() {
+  const size = canvas.width;
+  const center = size / 2;
+  const radius = center - 10;
+  ctx.clearRect(0, 0, size, size);
+  if (names.length === 0) {
+    ctx.beginPath();
+    ctx.arc(center, center, radius, 0, Math.PI * 2);
+    ctx.fillStyle = "#293244";
+    ctx.fill();
+    ctx.fillStyle = "#ffffff";
+    ctx.font = "bold 34px Arial";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText("أضف أسماء أولًا", center, center);
+    return;
+  }
+  const slice = (Math.PI * 2) / names.length;
+  names.forEach((name, index) => {
+    const start = angle + index * slice - Math.PI / 2;
+    const end = start + slice;
+    ctx.beginPath();
+    ctx.moveTo(center, center);
+    ctx.arc(center, center, radius, start, end);
+    ctx.closePath();
+    ctx.fillStyle = colors[index % colors.length];
+    ctx.fill();
+    ctx.strokeStyle = "#ffffff";
+    ctx.lineWidth = 3;
+    ctx.stroke();
+    ctx.save();
+    ctx.translate(center, center);
+    ctx.rotate(start + slice / 2);
+    ctx.textAlign = "right";
+    ctx.textBaseline = "middle";
+    ctx.fillStyle = "#ffffff";
+    ctx.font = "bold " +
+      (names.length > 12 ? "19px" : "25px") +
+      " Arial";
+    let label = name;
+    if (label.length > 18) {
+      label = label.slice(0, 16) + "…";
+    }
+    ctx.fillText(label, radius - 25, 0);
+    ctx.restore();
+  });
+  ctx.beginPath();
+  ctx.arc(center, center, 45, 0, Math.PI * 2);
+  ctx.fillStyle = "#ffffff";
+  ctx.fill();
+  ctx.fillStyle = "#111827";
+  ctx.font = "bold 23px Arial";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText("🎡", center, center);
+}
+function renderNames() {
+  namesList.replaceChildren();
+  names.forEach((name, index) => {
+    const item = document.createElement("span");
+    item.className = "name-item";
+    const label = document.createElement("span");
+    label.textContent = name;
+    const removeBtn = document.createElement("button");
+    removeBtn.type = "button";
+    removeBtn.textContent = "×";
+    removeBtn.setAttribute("aria-label", "حذف " + name);
+    removeBtn.addEventListener("click", () => {
+      if (spinning) return;
+      names.splice(index, 1);
+      result.textContent = "تم حذف الاسم.";
+      renderNames();
+      drawWheel();
+    });
+    item.append(label, removeBtn);
+    namesList.appendChild(item);
+  });
+}
+function addName() {
+  if (spinning) return;
+  const name = nameInput.value.trim();
+  if (!name) {
+    result.textContent = "اكتب اسمًا أولًا!";
+    nameInput.focus();
+    return;
+  }
+  if (names.length >= 100) {
+    result.textContent = "الحد الأقصى هو 100 اسم.";
+    return;
+  }
+  names.push(name);
+  nameInput.value = "";
+  result.textContent = "تمت إضافة: " + name;
+  renderNames();
+  drawWheel();
+  nameInput.focus();
+}
+document.getElementById("addBtn").addEventListener("click", addName);
+nameInput.addEventListener("keydown", event => {
+  if (event.key === "Enter") {
+    addName();
+  }
+});
+document.getElementById("clearBtn").addEventListener("click", () => {
+  if (spinning) return;
+  names = [];
+  angle = 0;
+  result.textContent = "تم حذف جميع الأسماء.";
+  renderNames();
+  drawWheel();
+});
+spinBtn.addEventListener("click", () => {
+  if (spinning) return;
+  if (names.length < 2) {
+    result.textContent = "أضف اسمين على الأقل لتدوير العجلة!";
+    return;
+  }
+  spinning = true;
+  spinBtn.disabled = true;
+  spinBtn.textContent = "⏳ العجلة تدور...";
+  result.textContent = "من سيكون الفائز؟ 🎯";
+  const startAngle = angle;
+  const extraRotation = (5 + Math.random() * 5) * Math.PI * 2;
+  const randomOffset = Math.random() * Math.PI * 2;
+  const targetAngle = startAngle + extraRotation + randomOffset;
+  const duration = 4500;
+  const startTime = performance.now();
+  function animate(now) {
+    const progress = Math.min((now - startTime) / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 4);
+    angle = startAngle + (targetAngle - startAngle) * eased;
+    drawWheel();
+    if (progress < 1) {
+      requestAnimationFrame(animate);
+    } else {
+      angle = angle % (Math.PI * 2);
+      const slice = (Math.PI * 2) / names.length;
+      const pointerAngle = (Math.PI * 2 - angle) % (Math.PI * 2);
+      const winnerIndex =
+        Math.floor(pointerAngle / slice) % names.length;
+      result.textContent = "🎉 الفائز هو: " + names[winnerIndex] + " 🎉";
+      spinning = false;
+      spinBtn.disabled = false;
+      spinBtn.textContent = "🎯 دوّر مرة أخرى!";
+      drawWheel();
+    }
+  }
+  requestAnimationFrame(animate);
+});
+drawWheel();
+</script>
+</body>
+</html>
