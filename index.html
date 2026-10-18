@@ -3,515 +3,815 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>عجلة الحظ | PlayZone</title>
+<meta name="theme-color" content="#090b18">
+<title>PlayZone Wheel PRO</title>
 
 <style>
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+*{box-sizing:border-box}
+:root{
+  --bg:#090b18;
+  --panel:#12162b;
+  --text:#f5f6ff;
+  --muted:#9da8ca;
+  --gold:#ffd66b;
+  --purple:#a99aff;
+  --pink:#ff83c8;
 }
-
-body {
-    font-family: Arial, sans-serif;
-    background: radial-gradient(circle at top, #202957, #090d1e 75%);
-    color: white;
-    min-height: 100vh;
-    text-align: center;
-    padding: 22px 15px 40px;
+body{
+  margin:0;
+  min-height:100vh;
+  font-family:Arial,sans-serif;
+  color:var(--text);
+  background:
+    radial-gradient(ellipse at 50% 0%,#29264f 0%,transparent 50%),
+    var(--bg);
+  text-align:center;
+  padding:22px 13px 40px;
 }
-
-header {
-    margin-bottom: 25px;
+button,textarea{font:inherit}
+button{cursor:pointer}
+header{margin-bottom:24px}
+.logo{
+  display:inline-block;
+  border:1px solid #49436d;
+  border-radius:30px;
+  padding:9px 17px;
+  color:var(--gold);
+  font-size:12px;
+  letter-spacing:2px;
+  font-weight:bold;
 }
-
-.logo {
-    display: inline-block;
-    font-size: 14px;
-    font-weight: bold;
-    letter-spacing: 2px;
-    color: #9daaff;
-    border: 1px solid #414b80;
-    padding: 9px 17px;
-    border-radius: 30px;
-    margin-bottom: 17px;
+h1{
+  font-size:clamp(30px,8vw,45px);
+  margin:18px 0 8px;
+  background:linear-gradient(90deg,var(--gold),var(--pink),var(--purple));
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
 }
-
-h1 {
-    font-size: clamp(30px, 7vw, 45px);
-    margin-bottom: 10px;
-    background: linear-gradient(90deg, #ffdc72, #ff8ecf, #a9a4ff);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+.subtitle{color:var(--muted);font-size:14px;line-height:1.8}
+.container{max-width:490px;margin:auto}
+.card{
+  background:linear-gradient(145deg,rgba(255,255,255,.075),rgba(255,255,255,.025));
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:25px;
+  padding:19px 15px;
+  box-shadow:0 20px 55px #0005;
+  margin-bottom:16px;
 }
-
-.subtitle {
-    color: #aeb8d7;
-    font-size: 14px;
-    line-height: 1.8;
+.wheel-wrap{
+  position:relative;
+  width:min(100%,360px);
+  aspect-ratio:1;
+  margin:3px auto 22px;
+  padding:10px;
+  border-radius:50%;
+  background:conic-gradient(from 20deg,#ffe69a,#a99aff,#ff83c8,#7ee7db,#ffe69a);
+  box-shadow:0 0 28px #a99aff25,0 9px 20px #0005;
 }
-
-.game {
-    max-width: 480px;
-    margin: auto;
-    background: rgba(255,255,255,.055);
-    border: 1px solid rgba(255,255,255,.12);
-    border-radius: 28px;
-    padding: 23px 16px;
-    box-shadow: 0 20px 60px rgba(0,0,0,.3);
+.wheel-wrap:before{
+  content:"";
+  position:absolute;
+  inset:4px;
+  border:2px solid #fff7;
+  border-radius:50%;
+  pointer-events:none;
+  z-index:2;
 }
-
-.wheel-area {
-    position: relative;
-    width: min(100%, 360px);
-    aspect-ratio: 1;
-    margin: 0 auto 22px;
-    padding: 12px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #ffd76a, #ff83d0, #8e8cff, #ffd76a);
-    box-shadow: 0 0 35px rgba(139,128,255,.22);
+canvas{display:block;width:100%;height:100%;border-radius:50%}
+.pointer{
+  position:absolute;
+  top:-2px;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:4;
+  width:0;height:0;
+  border-left:17px solid transparent;
+  border-right:17px solid transparent;
+  border-top:32px solid #fff0b7;
+  filter:drop-shadow(0 3px 4px #0009);
 }
-
-canvas {
-    width: 100%;
-    height: 100%;
-    display: block;
-    border-radius: 50%;
+.hub{
+  position:absolute;
+  left:50%;top:50%;
+  transform:translate(-50%,-50%);
+  width:58px;height:58px;
+  border-radius:50%;
+  border:5px solid #fff1bd;
+  background:linear-gradient(145deg,#35304f,#14172d);
+  display:grid;place-items:center;
+  font-size:25px;
+  box-shadow:0 0 18px #0008;
+  pointer-events:none;
+  z-index:3;
 }
-
-.pointer {
-    position: absolute;
-    top: -3px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 0;
-    height: 0;
-    border-left: 17px solid transparent;
-    border-right: 17px solid transparent;
-    border-top: 32px solid #fff4bd;
-    filter: drop-shadow(0 4px 5px rgba(0,0,0,.5));
-    z-index: 3;
+.primary{
+  width:100%;
+  border:0;
+  border-radius:15px;
+  padding:16px 12px;
+  background:linear-gradient(100deg,var(--gold),var(--pink));
+  color:#19162c;
+  font-weight:bold;
+  font-size:18px;
+  box-shadow:0 7px 23px #ff83c82b;
 }
-
-.center {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 57px;
-    height: 57px;
-    border-radius: 50%;
-    background: #fff;
-    color: #171b38;
-    display: grid;
-    place-items: center;
-    font-size: 25px;
-    border: 5px solid #ffdc72;
-    box-shadow: 0 0 20px rgba(0,0,0,.35);
-    pointer-events: none;
+.primary:disabled{opacity:.5;cursor:not-allowed}
+.secondary{
+  border:1px solid #3a4164;
+  background:#202640;
+  color:#e8eaff;
+  border-radius:12px;
+  padding:12px 10px;
 }
-
-button {
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: bold;
-    transition: transform .15s, opacity .2s;
+.status{font-size:13px;color:#b7c0df;margin:15px 0 0;line-height:1.8}
+.section-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:12px;
 }
-
-button:active {
-    transform: scale(.97);
+.section-head h2{font-size:16px;margin:0}
+.badge{
+  background:#29294a;
+  color:var(--gold);
+  border-radius:30px;
+  padding:6px 10px;
+  font-size:12px;
 }
-
-.spin {
-    width: 100%;
-    padding: 17px;
-    border-radius: 17px;
-    color: #15162b;
-    background: linear-gradient(100deg, #ffdc72, #ff9bcf);
-    box-shadow: 0 7px 24px rgba(255,154,204,.17);
-    font-size: 19px;
+textarea{
+  width:100%;
+  min-height:125px;
+  resize:vertical;
+  border:1px solid #353d62;
+  border-radius:14px;
+  background:#0d1123;
+  color:white;
+  padding:13px;
+  outline:none;
+  font-size:15px;
+  line-height:1.9;
 }
-
-.spin:disabled {
-    opacity: .5;
-    cursor: not-allowed;
+textarea:focus{border-color:var(--purple)}
+.hint{text-align:right;color:var(--muted);font-size:12px;line-height:1.8}
+.row{display:flex;gap:9px}
+.row button{flex:1}
+.stats{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-bottom:16px;
 }
-
-.section-title {
-    text-align: right;
-    font-size: 17px;
-    margin: 24px 0 12px;
+.stat{
+  padding:14px 8px;
+  border-radius:15px;
+  background:#ffffff08;
+  border:1px solid #ffffff0c;
 }
-
-textarea {
-    width: 100%;
-    min-height: 115px;
-    background: #10162e;
-    border: 1px solid #343e68;
-    color: white;
-    border-radius: 15px;
-    padding: 14px;
-    font-size: 15px;
-    line-height: 1.8;
-    resize: vertical;
-    outline: none;
+.stat strong{display:block;font-size:23px;color:var(--gold);margin-bottom:6px}
+.stat span{font-size:12px;color:var(--muted)}
+.history{
+  list-style:none;
+  padding:0;
+  margin:0;
+  text-align:right;
 }
-
-textarea:focus {
-    border-color: #a19bff;
+.history li{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  padding:12px 0;
+  border-bottom:1px solid #ffffff12;
 }
-
-.hint {
-    text-align: right;
-    color: #929dbf;
-    font-size: 12px;
-    margin: 8px 2px 12px;
+.history li:last-child{border-bottom:0}
+.history-name{overflow-wrap:anywhere;font-weight:bold}
+.history-date{font-size:11px;color:var(--muted);margin-top:5px}
+.history-remove{
+  border:0;
+  color:#ff9cba;
+  background:#ff6c8c18;
+  padding:8px 10px;
+  border-radius:9px;
 }
-
-.actions {
-    display: flex;
-    gap: 9px;
+.empty{color:var(--muted);font-size:13px;padding:15px 0}
+.small-btn{font-size:12px;padding:8px 10px}
+footer{color:#717b9e;font-size:11px;letter-spacing:1.5px;margin-top:25px}
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:20;
+  padding:20px;
+  align-items:center;
+  justify-content:center;
+  background:#050713dd;
+  backdrop-filter:blur(9px);
 }
-
-.actions button {
-    flex: 1;
-    padding: 13px 8px;
-    border-radius: 12px;
+.modal.show{display:flex}
+.result{
+  width:100%;
+  max-width:350px;
+  padding:30px 20px;
+  border:1px solid #8d80dc;
+  border-radius:25px;
+  background:linear-gradient(145deg,#282c54,#11162c);
+  box-shadow:0 0 55px #a99aff35;
+  animation:pop .35s ease;
 }
-
-.update {
-    background: #a49aff;
-    color: #15152b;
+@keyframes pop{
+  from{opacity:0;transform:scale(.8)}
+  to{opacity:1;transform:scale(1)}
 }
-
-.clear {
-    background: #292f4d;
-    color: #e2e5ff;
+.trophy{font-size:55px}
+.result h2{color:var(--gold)}
+.winner-name{
+  font-size:clamp(25px,7vw,34px);
+  font-weight:bold;
+  overflow-wrap:anywhere;
+  margin:22px 0;
 }
-
-.status {
-    color: #abb5d5;
-    margin-top: 15px;
-    font-size: 13px;
+.result .primary{margin-top:10px}
+.result .secondary{width:100%;margin-top:9px}
+#confetti{
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+  z-index:25;
 }
-
-footer {
-    color: #7782a7;
-    margin-top: 25px;
-    font-size: 12px;
-    letter-spacing: 1px;
+@media(max-width:360px){
+  .card{padding:14px 10px}
+  .wheel-wrap{padding:8px}
+  .hub{width:48px;height:48px}
 }
-
-.modal {
-    position: fixed;
-    inset: 0;
-    z-index: 10;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    background: rgba(4,7,20,.82);
-    backdrop-filter: blur(8px);
-}
-
-.modal.show {
-    display: flex;
-}
-
-.result {
-    width: 100%;
-    max-width: 340px;
-    padding: 30px 20px;
-    background: linear-gradient(145deg, #252d55, #151a34);
-    border: 1px solid #7770bd;
-    border-radius: 25px;
-    box-shadow: 0 0 60px rgba(146,126,255,.2);
-    animation: appear .35s ease;
-}
-
-@keyframes appear {
-    from { opacity: 0; transform: scale(.8); }
-    to { opacity: 1; transform: scale(1); }
-}
-
-.trophy {
-    font-size: 55px;
-    margin-bottom: 12px;
-}
-
-.result h2 {
-    color: #ffdc72;
-    margin-bottom: 12px;
-}
-
-.winner {
-    font-size: 28px;
-    font-weight: bold;
-    overflow-wrap: anywhere;
-    margin: 20px 0;
-}
-
-.close {
-    width: 100%;
-    padding: 14px;
-    border-radius: 13px;
-    background: linear-gradient(100deg, #ffdc72, #ff9bcf);
-    color: #17162b;
-}
-
-@media (max-width: 380px) {
-    .game { padding: 18px 12px; }
-    .wheel-area { padding: 9px; }
+@media(prefers-reduced-motion:reduce){
+  *{scroll-behavior:auto!important}
 }
 </style>
 </head>
 
 <body>
 
+<canvas id="confetti"></canvas>
+
 <header>
-    <div class="logo">✦ PLAYZONE GAMES ✦</div>
-    <h1>عجلة الحظ</h1>
-    <p class="subtitle">أدر العجلة… ودع الحظ يختار الفائز! 🎯</p>
+  <div class="logo">✦ PLAYZONE GAMES ✦</div>
+  <h1>عجلة الحظ PRO</h1>
+  <p class="subtitle">لحظة حماس… واسم واحد يفوز! 🎯</p>
 </header>
 
-<main class="game">
+<main class="container">
 
-    <div class="wheel-area">
-        <div class="pointer"></div>
-        <canvas id="wheel" width="700" height="700"></canvas>
-        <div class="center">★</div>
+  <div class="stats">
+    <div class="stat">
+      <strong id="peopleCount">6</strong>
+      <span>عدد المشاركين</span>
+    </div>
+    <div class="stat">
+      <strong id="winsCount">0</strong>
+      <span>الفائزون المسجلون</span>
+    </div>
+  </div>
+
+  <section class="card">
+    <div class="wheel-wrap">
+      <div class="pointer"></div>
+      <canvas id="wheel" width="700" height="700"></canvas>
+      <div class="hub">★</div>
     </div>
 
-    <button class="spin" id="spinBtn" onclick="spinWheel()">
-        🎡 أدر عجلة الحظ
-    </button>
+    <button class="primary" id="spinBtn">🎡 أدر عجلة الحظ</button>
+    <p class="status" id="status">أضف أسماء المشاركين واستعد للحماس!</p>
+  </section>
 
-    <p class="status" id="status">أضف الأسماء ثم ابدأ الدوران</p>
-
-    <h3 class="section-title">✦ أسماء المشاركين</h3>
-
-    <textarea id="names" placeholder="اكتب اسم كل مشارك في سطر منفصل&#10;أحمد&#10;محمد&#10;علي&#10;سارة"></textarea>
-
-    <p class="hint">💡 اكتب كل اسم في سطر منفصل.</p>
-
-    <div class="actions">
-        <button class="update" onclick="updateNames()">تحديث الأسماء ✓</button>
-        <button class="clear" onclick="clearNames()">مسح الكل</button>
+  <section class="card">
+    <div class="section-head">
+      <h2>✏️ المشاركون</h2>
+      <span class="badge" id="namesBadge">6 أسماء</span>
     </div>
+
+    <textarea id="namesInput" placeholder="اكتب كل اسم في سطر منفصل"></textarea>
+    <p class="hint">اكتب اسم كل مشارك في سطر منفصل. يمكنك إضافة أسماء كثيرة.</p>
+
+    <div class="row">
+      <button class="primary" id="updateBtn" style="font-size:14px">تحديث الأسماء ✓</button>
+      <button class="secondary" id="clearBtn">مسح الكل</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="section-head">
+      <h2>🏆 سجل الفائزين</h2>
+      <button class="secondary small-btn" id="clearHistoryBtn">مسح السجل</button>
+    </div>
+
+    <ul class="history" id="historyList"></ul>
+    <p class="hint">يُحفظ السجل على هذا الجهاز باستخدام التخزين المحلي للمتصفح.</p>
+  </section>
 
 </main>
 
-<footer>PLAYZONE · LET THE LUCK DECIDE</footer>
+<footer>PLAYZONE WHEEL PRO · LET THE LUCK DECIDE</footer>
 
-<div class="modal" id="modal">
-    <div class="result">
-        <div class="trophy">🏆</div>
-        <h2>مبروك للفائز!</h2>
-        <div class="winner" id="winner"></div>
-        <button class="close" onclick="closeModal()">رائع! ✨</button>
-    </div>
+<div class="modal" id="winnerModal" role="dialog" aria-modal="true" aria-labelledby="winnerHeading">
+  <div class="result">
+    <div class="trophy">🏆</div>
+    <h2 id="winnerHeading">مبروك للفائز!</h2>
+    <div class="winner-name" id="winnerName"></div>
+    <p class="subtitle">الحظ اختار الفائز هذه المرة ✨</p>
+    <button class="primary" id="closeModalBtn">رائع! 🎉</button>
+    <button class="secondary" id="spinAgainBtn">🔄 دورة جديدة</button>
+  </div>
 </div>
 
 <script>
-const canvas = document.getElementById("wheel");
-const ctx = canvas.getContext("2d");
-const namesBox = document.getElementById("names");
-const spinBtn = document.getElementById("spinBtn");
-const statusText = document.getElementById("status");
+(() => {
+  "use strict";
 
-const colors = [
-    "#ff6482", "#7667ff", "#ffb84d", "#22c8b8",
-    "#f06bc0", "#4c9cff", "#a5d957", "#ff8059",
-    "#9b7bff", "#f3c95b", "#40c9e5", "#ef7197"
-];
+  const $ = id => document.getElementById(id);
 
-let names = ["أحمد", "محمد", "علي", "سارة", "خالد", "نور"];
-let rotation = 0;
-let spinning = false;
+  const wheel = $("wheel");
+  const ctx = wheel.getContext("2d");
+  const input = $("namesInput");
+  const spinBtn = $("spinBtn");
+  const status = $("status");
 
-namesBox.value = names.join("\n");
+  const colors = [
+    "#fa587e", "#7164f5", "#f5a943", "#20bcae",
+    "#d95db9", "#348fe8", "#83bc42", "#f06c50",
+    "#9170e9", "#dfb53f", "#24abc9", "#d64d9b",
+    "#5e70d9", "#e78d42", "#3eac80", "#bc68e4"
+  ];
 
-function drawWheel() {
-    const cx = canvas.width / 2;
-    const cy = canvas.height / 2;
-    const radius = 335;
+  const defaultNames = ["أحمد", "محمد", "علي", "سارة", "خالد", "نور"];
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  let names = [...defaultNames];
+  let rotation = 0;
+  let spinning = false;
+  let audioContext = null;
+  let tickTimer = null;
+  let confettiFrame = null;
+  let confettiPieces = [];
 
-    if (names.length === 0) {
-        ctx.beginPath();
-        ctx.arc(cx, cy, radius, 0, Math.PI * 2);
-        ctx.fillStyle = "#303858";
-        ctx.fill();
+  function loadStorage(key, fallback) {
+    try {
+      const value = localStorage.getItem(key);
+      return value ? JSON.parse(value) : fallback;
+    } catch (_) {
+      return fallback;
+    }
+  }
 
-        ctx.fillStyle = "#ffffff";
-        ctx.font = "bold 32px Arial";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillText("أضف أسماءك", cx, cy);
-        return;
+  let history = loadStorage("playzoneWheelHistoryV2", []);
+
+  if (!Array.isArray(history)) history = [];
+
+  function saveHistory() {
+    try {
+      localStorage.setItem(
+        "playzoneWheelHistoryV2",
+        JSON.stringify(history.slice(0, 100))
+      );
+    } catch (_) {
+      status.textContent = "تعذّر حفظ السجل على هذا الجهاز.";
+    }
+  }
+
+  function updateStats() {
+    $("peopleCount").textContent = names.length;
+    $("namesBadge").textContent = names.length + " أسماء";
+    $("winsCount").textContent = history.length;
+  }
+
+  function drawWheel() {
+    const size = wheel.width;
+    const center = size / 2;
+    const radius = size / 2 - 8;
+
+    ctx.clearRect(0, 0, size, size);
+
+    if (!names.length) {
+      ctx.beginPath();
+      ctx.arc(center, center, radius, 0, Math.PI * 2);
+      ctx.fillStyle = "#262d4c";
+      ctx.fill();
+
+      ctx.fillStyle = "#ffffff";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.font = "bold 32px Arial";
+      ctx.fillText("أضف أسماءك", center, center);
+      return;
     }
 
-    const slice = (Math.PI * 2) / names.length;
+    const slice = Math.PI * 2 / names.length;
 
     ctx.save();
-    ctx.translate(cx, cy);
+    ctx.translate(center, center);
     ctx.rotate(rotation);
 
-    names.forEach((name, i) => {
-        const start = i * slice;
-        const end = start + slice;
+    names.forEach((name, index) => {
+      const start = index * slice;
+      const end = start + slice;
 
-        ctx.beginPath();
-        ctx.moveTo(0, 0);
-        ctx.arc(0, 0, radius, start, end);
-        ctx.closePath();
-        ctx.fillStyle = colors[i % colors.length];
-        ctx.fill();
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.arc(0, 0, radius, start, end);
+      ctx.closePath();
+      ctx.fillStyle = colors[index % colors.length];
+      ctx.fill();
 
-        ctx.strokeStyle = "rgba(255,255,255,.7)";
-        ctx.lineWidth = 3;
-        ctx.stroke();
+      ctx.strokeStyle = "#ffffff65";
+      ctx.lineWidth = 3;
+      ctx.stroke();
 
-        ctx.save();
-        ctx.rotate(start + slice / 2);
+      ctx.save();
+      ctx.rotate(start + slice / 2);
+      ctx.textAlign = "right";
+      ctx.textBaseline = "middle";
+      ctx.fillStyle = "#ffffff";
+      ctx.shadowColor = "#0008";
+      ctx.shadowBlur = 4;
 
-        ctx.textAlign = "right";
-        ctx.textBaseline = "middle";
-        ctx.fillStyle = "#ffffff";
-        ctx.shadowColor = "rgba(0,0,0,.3)";
-        ctx.shadowBlur = 4;
+      const fontSize = names.length > 20 ? 15 :
+                       names.length > 12 ? 19 :
+                       names.length > 7 ? 24 : 28;
 
-        let fontSize = names.length > 15 ? 19 :
-                       names.length > 9 ? 23 : 28;
+      ctx.font = `bold ${fontSize}px Arial`;
 
-        ctx.font = `bold ${fontSize}px Arial`;
+      let label = name;
+      const maxWidth = radius * 0.70;
 
-        let displayName = name;
-        while (ctx.measureText(displayName).width > radius * .66 &&
-               displayName.length > 2) {
-            displayName = displayName.slice(0, -1);
-        }
+      while (ctx.measureText(label).width > maxWidth && label.length > 2) {
+        label = label.slice(0, -1);
+      }
 
-        if (displayName !== name) displayName += "…";
+      if (label !== name) label += "…";
 
-        ctx.fillText(displayName, radius - 25, 0);
-        ctx.restore();
+      ctx.fillText(label, radius - 25, 0);
+      ctx.restore();
     });
 
     ctx.restore();
 
     ctx.beginPath();
-    ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+    ctx.arc(center, center, radius, 0, Math.PI * 2);
     ctx.strokeStyle = "#ffffff";
-    ctx.lineWidth = 7;
+    ctx.lineWidth = 5;
     ctx.stroke();
-}
+  }
 
-function updateNames() {
+  function updateNames() {
     if (spinning) return;
 
-    const entered = namesBox.value
-        .split("\n")
-        .map(n => n.trim())
-        .filter(n => n.length > 0);
+    const newNames = input.value
+      .split(/\n/)
+      .map(name => name.trim())
+      .filter(Boolean);
 
-    if (entered.length < 2) {
-        statusText.textContent = "⚠️ أدخل اسمين على الأقل للبدء.";
-        return;
+    if (newNames.length < 2) {
+      status.textContent = "⚠️ أدخل اسمين على الأقل لتدوير العجلة.";
+      return;
     }
 
-    names = entered;
+    if (newNames.length > 100) {
+      status.textContent = "⚠️ الحد الأقصى هو 100 مشارك.";
+      return;
+    }
+
+    names = newNames;
     rotation = 0;
+
     drawWheel();
+    updateStats();
 
-    statusText.textContent = `تم تجهيز العجلة بـ ${names.length} مشاركًا ✓`;
-}
+    status.textContent = `تم تجهيز العجلة بـ ${names.length} مشاركًا ✓`;
+  }
 
-function clearNames() {
+  function clearNames() {
     if (spinning) return;
 
     names = [];
-    namesBox.value = "";
+    input.value = "";
     rotation = 0;
+
     drawWheel();
+    updateStats();
 
-    statusText.textContent = "تم مسح الأسماء. أضف أسماء جديدة.";
-}
+    status.textContent = "تم مسح الأسماء. أضف مشاركين للبدء.";
+  }
 
-function spinWheel() {
+  function getAudio() {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+
+    if (!AudioCtx) return null;
+
+    if (!audioContext) audioContext = new AudioCtx();
+
+    if (audioContext.state === "suspended") {
+      audioContext.resume().catch(() => {});
+    }
+
+    return audioContext;
+  }
+
+  function beep(frequency, duration, volume = 0.035, type = "sine") {
+    const audio = getAudio();
+    if (!audio) return;
+
+    try {
+      const oscillator = audio.createOscillator();
+      const gain = audio.createGain();
+
+      oscillator.type = type;
+      oscillator.frequency.setValueAtTime(frequency, audio.currentTime);
+
+      gain.gain.setValueAtTime(volume, audio.currentTime);
+      gain.gain.exponentialRampToValueAtTime(
+        0.001,
+        audio.currentTime + duration
+      );
+
+      oscillator.connect(gain);
+      gain.connect(audio.destination);
+
+      oscillator.start();
+      oscillator.stop(audio.currentTime + duration);
+    } catch (_) {}
+  }
+
+  function playWinSound() {
+    beep(523, 0.18, 0.05);
+    setTimeout(() => beep(659, 0.18, 0.05), 140);
+    setTimeout(() => beep(784, 0.22, 0.05), 280);
+    setTimeout(() => beep(1047, 0.45, 0.06), 430);
+  }
+
+  function startTicks(duration) {
+    const start = performance.now();
+
+    function tick() {
+      if (!spinning) return;
+
+      const elapsed = performance.now() - start;
+      const progress = Math.min(elapsed / duration, 1);
+      const frequency = 280 + progress * 140;
+
+      beep(frequency, 0.025, 0.012, "square");
+
+      const delay = 65 + progress * 200;
+      tickTimer = setTimeout(tick, delay);
+    }
+
+    tick();
+  }
+
+  function stopTicks() {
+    if (tickTimer) clearTimeout(tickTimer);
+    tickTimer = null;
+  }
+
+  function launchConfetti() {
+    const canvas = $("confetti");
+    const c = canvas.getContext("2d");
+
+    if (confettiFrame) cancelAnimationFrame(confettiFrame);
+
+    canvas.width = window.innerWidth * Math.min(window.devicePixelRatio || 1, 2);
+    canvas.height = window.innerHeight * Math.min(window.devicePixelRatio || 1, 2);
+
+    c.setTransform(
+      Math.min(window.devicePixelRatio || 1, 2), 0,
+      0, Math.min(window.devicePixelRatio || 1, 2), 0, 0
+    );
+
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    const palette = ["#ffd66b", "#ff83c8", "#a99aff", "#7ee7db", "#ffffff"];
+
+    confettiPieces = Array.from({length: 150}, () => ({
+      x: Math.random() * w,
+      y: -Math.random() * h * 0.8,
+      vx: (Math.random() - 0.5) * 4,
+      vy: 2 + Math.random() * 5,
+      size: 4 + Math.random() * 6,
+      angle: Math.random() * 6,
+      spin: (Math.random() - 0.5) * 0.2,
+      color: palette[Math.floor(Math.random() * palette.length)]
+    }));
+
+    const start = performance.now();
+
+    function frame(now) {
+      c.clearRect(0, 0, w, h);
+
+      confettiPieces.forEach(piece => {
+        piece.x += piece.vx;
+        piece.y += piece.vy;
+        piece.angle += piece.spin;
+        piece.vy += 0.025;
+
+        c.save();
+        c.translate(piece.x, piece.y);
+        c.rotate(piece.angle);
+        c.fillStyle = piece.color;
+        c.fillRect(-piece.size / 2, -piece.size / 2,
+                   piece.size, piece.size * 1.5);
+        c.restore();
+      });
+
+      if (now - start < 4500) {
+        confettiFrame = requestAnimationFrame(frame);
+      } else {
+        c.clearRect(0, 0, w, h);
+        confettiFrame = null;
+      }
+    }
+
+    confettiFrame = requestAnimationFrame(frame);
+  }
+
+  function renderHistory() {
+    const list = $("historyList");
+    list.innerHTML = "";
+
+    if (!history.length) {
+      const li = document.createElement("li");
+      li.className = "empty";
+      li.textContent = "لم يتم اختيار أي فائز بعد.";
+      list.appendChild(li);
+    } else {
+      history.slice(0, 20).forEach((item, index) => {
+        const li = document.createElement("li");
+        const details = document.createElement("div");
+
+        const name = document.createElement("div");
+        name.className = "history-name";
+        name.textContent = `🏆 ${item.name}`;
+
+        const date = document.createElement("div");
+        date.className = "history-date";
+        date.textContent = item.date || "";
+
+        details.appendChild(name);
+        details.appendChild(date);
+
+        const remove = document.createElement("button");
+        remove.className = "history-remove";
+        remove.textContent = "حذف";
+        remove.setAttribute("aria-label", "حذف سجل الفائز " + item.name);
+
+        remove.addEventListener("click", () => {
+          history.splice(index, 1);
+          saveHistory();
+          renderHistory();
+          updateStats();
+        });
+
+        li.appendChild(details);
+        li.appendChild(remove);
+        list.appendChild(li);
+      });
+    }
+
+    updateStats();
+  }
+
+  function showWinner(name) {
+    $("winnerName").textContent = name;
+    $("winnerModal").classList.add("show");
+
+    history.unshift({
+      name,
+      date: new Date().toLocaleString("ar", {
+        dateStyle: "medium",
+        timeStyle: "short"
+      })
+    });
+
+    history = history.slice(0, 100);
+    saveHistory();
+    renderHistory();
+
+    launchConfetti();
+    playWinSound();
+  }
+
+  function closeModal() {
+    $("winnerModal").classList.remove("show");
+  }
+
+  function spinWheel() {
     if (spinning) return;
 
     if (names.length < 2) {
-        statusText.textContent = "⚠️ أضف اسمين على الأقل واضغط تحديث الأسماء.";
-        return;
+      status.textContent = "⚠️ أضف اسمين على الأقل واضغط تحديث الأسماء.";
+      return;
     }
+
+    // بدء الصوت بعد تفاعل المستخدم مع الزر
+    getAudio();
 
     spinning = true;
     spinBtn.disabled = true;
-    statusText.textContent = "🎡 العجلة تدور… من سيكون الفائز؟";
+    $("updateBtn").disabled = true;
+    $("clearBtn").disabled = true;
 
-    const slice = (Math.PI * 2) / names.length;
+    status.textContent = "🎡 العجلة تدور… من سيكون الفائز؟";
+
+    const slice = 2 * Math.PI / names.length;
     const winnerIndex = Math.floor(Math.random() * names.length);
 
-    // تحديد الاسم المختار تحت المؤشر الموجود أعلى العجلة
-    const targetAngle = (
-        Math.PI * 1.5 -
-        (winnerIndex * slice + slice / 2)
-    );
+    // المؤشر أعلى العجلة، عند زاوية -π/2
+    const target = -Math.PI / 2 - (winnerIndex + 0.5) * slice;
 
-    const current = ((rotation % (Math.PI * 2)) + Math.PI * 2)
-                    % (Math.PI * 2);
+    const current = ((rotation % (2 * Math.PI)) + 2 * Math.PI)
+                    % (2 * Math.PI);
 
-    let delta = targetAngle - current;
-    delta = ((delta % (Math.PI * 2)) + Math.PI * 2)
-            % (Math.PI * 2);
+    const targetNormalized = ((target % (2 * Math.PI)) + 2 * Math.PI)
+                             % (2 * Math.PI);
 
-    const extraTurns = 6 + Math.floor(Math.random() * 4);
+    const delta = (targetNormalized - current + 2 * Math.PI)
+                  % (2 * Math.PI);
+
+    const fullTurns = (6 + Math.floor(Math.random() * 4)) * 2 * Math.PI;
+    const total = fullTurns + delta;
     const startRotation = rotation;
-    const totalRotation = extraTurns * Math.PI * 2 + delta;
-    const duration = 4800;
+    const duration = 5200;
     const startTime = performance.now();
 
-    function animate(now) {
-        const progress = Math.min((now - startTime) / duration, 1);
-        const eased = 1 - Math.pow(1 - progress, 5);
+    startTicks(duration);
 
-        rotation = startRotation + totalRotation * eased;
+    function animate(now) {
+      const progress = Math.min((now - startTime) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 5);
+
+      rotation = startRotation + total * eased;
+      drawWheel();
+
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      } else {
+        rotation = ((rotation % (2 * Math.PI)) + 2 * Math.PI)
+                   % (2 * Math.PI);
+
         drawWheel();
 
-        if (progress < 1) {
-            requestAnimationFrame(animate);
-        } else {
-            rotation = ((rotation % (Math.PI * 2)) + Math.PI * 2)
-                       % (Math.PI * 2);
+        spinning = false;
+        spinBtn.disabled = false;
+        $("updateBtn").disabled = false;
+        $("clearBtn").disabled = false;
 
-            drawWheel();
+        stopTicks();
 
-            spinning = false;
-            spinBtn.disabled = false;
+        const winner = names[winnerIndex];
 
-            const winnerName = names[winnerIndex];
-            document.getElementById("winner").textContent = winnerName;
-            document.getElementById("modal").classList.add("show");
-            statusText.textContent = `🏆 الفائز هو: ${winnerName}`;
-        }
+        status.textContent = `🏆 الفائز هو: ${winner}`;
+        showWinner(winner);
+      }
     }
 
     requestAnimationFrame(animate);
-}
+  }
 
-function closeModal() {
-    document.getElementById("modal").classList.remove("show");
-}
+  $("spinBtn").addEventListener("click", spinWheel);
+  $("updateBtn").addEventListener("click", updateNames);
+  $("clearBtn").addEventListener("click", clearNames);
+  $("closeModalBtn").addEventListener("click", closeModal);
 
-document.getElementById("modal").addEventListener("click", function(e) {
-    if (e.target === this) closeModal();
-});
+  $("spinAgainBtn").addEventListener("click", () => {
+    closeModal();
+    spinWheel();
+  });
 
-drawWheel();
+  $("clearHistoryBtn").addEventListener("click", () => {
+    if (!history.length) {
+      status.textContent = "سجل الفائزين فارغ بالفعل.";
+      return;
+    }
+
+    if (!window.confirm("هل تريد مسح سجل الفائزين بالكامل؟")) return;
+
+    history = [];
+    saveHistory();
+    renderHistory();
+
+    status.textContent = "تم مسح سجل الفائزين.";
+  });
+
+  $("winnerModal").addEventListener("click", event => {
+    if (event.target === $("winnerModal")) closeModal();
+  });
+
+  input.value = names.join("\n");
+
+  drawWheel();
+  renderHistory();
+  updateStats();
+})();
 </script>
 
 </body>
