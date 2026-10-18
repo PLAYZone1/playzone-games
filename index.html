@@ -2,63 +2,95 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#090b18">
 <title>PlayZone Wheel PRO</title>
 
 <style>
 *{box-sizing:border-box}
+
 :root{
   --bg:#090b18;
-  --panel:#12162b;
-  --text:#f5f6ff;
-  --muted:#9da8ca;
-  --gold:#ffd66b;
-  --purple:#a99aff;
+  --panel:#151a30;
+  --gold:#ffdc75;
   --pink:#ff83c8;
+  --purple:#a69aff;
+  --text:#f7f7ff;
+  --muted:#a6afce;
 }
+
 body{
   margin:0;
+  padding:22px 14px 40px;
   min-height:100vh;
-  font-family:Arial,sans-serif;
+  background:radial-gradient(ellipse at top,#29274f,transparent 60%),var(--bg);
   color:var(--text);
-  background:
-    radial-gradient(ellipse at 50% 0%,#29264f 0%,transparent 50%),
-    var(--bg);
+  font-family:Arial,sans-serif;
   text-align:center;
-  padding:22px 13px 40px;
 }
-button,textarea{font:inherit}
-button{cursor:pointer}
-header{margin-bottom:24px}
+
+header{margin-bottom:25px}
+
 .logo{
   display:inline-block;
-  border:1px solid #49436d;
-  border-radius:30px;
   padding:9px 17px;
+  border:1px solid #554d80;
+  border-radius:30px;
   color:var(--gold);
   font-size:12px;
   letter-spacing:2px;
   font-weight:bold;
 }
+
 h1{
-  font-size:clamp(30px,8vw,45px);
   margin:18px 0 8px;
+  font-size:clamp(30px,8vw,44px);
   background:linear-gradient(90deg,var(--gold),var(--pink),var(--purple));
   -webkit-background-clip:text;
   background-clip:text;
   color:transparent;
 }
-.subtitle{color:var(--muted);font-size:14px;line-height:1.8}
+
+.subtitle{
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.8;
+}
+
 .container{max-width:490px;margin:auto}
+
 .card{
-  background:linear-gradient(145deg,rgba(255,255,255,.075),rgba(255,255,255,.025));
-  border:1px solid rgba(255,255,255,.1);
-  border-radius:25px;
-  padding:19px 15px;
-  box-shadow:0 20px 55px #0005;
+  background:linear-gradient(145deg,#ffffff10,#ffffff04);
+  border:1px solid #ffffff17;
+  border-radius:24px;
+  padding:18px 14px;
+  margin-bottom:16px;
+  box-shadow:0 18px 50px #0004;
+}
+
+.stats{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
   margin-bottom:16px;
 }
+
+.stat{
+  background:#ffffff09;
+  border:1px solid #ffffff10;
+  border-radius:15px;
+  padding:13px 8px;
+}
+
+.stat strong{
+  display:block;
+  color:var(--gold);
+  font-size:24px;
+  margin-bottom:5px;
+}
+
+.stat span{color:var(--muted);font-size:12px}
+
 .wheel-wrap{
   position:relative;
   width:min(100%,360px);
@@ -66,65 +98,85 @@ h1{
   margin:3px auto 22px;
   padding:10px;
   border-radius:50%;
-  background:conic-gradient(from 20deg,#ffe69a,#a99aff,#ff83c8,#7ee7db,#ffe69a);
-  box-shadow:0 0 28px #a99aff25,0 9px 20px #0005;
+  background:conic-gradient(var(--gold),var(--pink),var(--purple),#72e5d4,var(--gold));
+  box-shadow:0 0 35px #a69aff35;
 }
-.wheel-wrap:before{
-  content:"";
-  position:absolute;
-  inset:4px;
-  border:2px solid #fff7;
+
+canvas#wheel{
+  width:100%;
+  height:100%;
+  display:block;
   border-radius:50%;
-  pointer-events:none;
-  z-index:2;
 }
-canvas{display:block;width:100%;height:100%;border-radius:50%}
+
 .pointer{
   position:absolute;
+  z-index:3;
   top:-2px;
   left:50%;
   transform:translateX(-50%);
-  z-index:4;
-  width:0;height:0;
+  width:0;
+  height:0;
   border-left:17px solid transparent;
   border-right:17px solid transparent;
-  border-top:32px solid #fff0b7;
+  border-top:32px solid #fff0b8;
   filter:drop-shadow(0 3px 4px #0009);
 }
+
 .hub{
   position:absolute;
-  left:50%;top:50%;
+  top:50%;
+  left:50%;
   transform:translate(-50%,-50%);
-  width:58px;height:58px;
+  width:56px;
+  height:56px;
+  display:grid;
+  place-items:center;
+  border:5px solid #fff0b8;
   border-radius:50%;
-  border:5px solid #fff1bd;
-  background:linear-gradient(145deg,#35304f,#14172d);
-  display:grid;place-items:center;
+  background:#202440;
   font-size:25px;
-  box-shadow:0 0 18px #0008;
+  box-shadow:0 0 18px #0009;
   pointer-events:none;
-  z-index:3;
 }
+
+button{
+  border:0;
+  font-family:inherit;
+  font-size:14px;
+  font-weight:bold;
+  cursor:pointer;
+  transition:transform .15s,opacity .2s;
+}
+
+button:active{transform:scale(.97)}
+
+button:disabled{opacity:.5;cursor:not-allowed}
+
 .primary{
   width:100%;
-  border:0;
-  border-radius:15px;
   padding:16px 12px;
-  background:linear-gradient(100deg,var(--gold),var(--pink));
+  border-radius:15px;
   color:#19162c;
-  font-weight:bold;
+  background:linear-gradient(100deg,var(--gold),var(--pink));
   font-size:18px;
-  box-shadow:0 7px 23px #ff83c82b;
 }
-.primary:disabled{opacity:.5;cursor:not-allowed}
+
 .secondary{
-  border:1px solid #3a4164;
-  background:#202640;
-  color:#e8eaff;
-  border-radius:12px;
   padding:12px 10px;
+  border-radius:12px;
+  color:#eeeaff;
+  background:#272d49;
+  border:1px solid #41496b;
 }
-.status{font-size:13px;color:#b7c0df;margin:15px 0 0;line-height:1.8}
+
+.status{
+  margin:14px 0 0;
+  color:#c1c8e2;
+  font-size:13px;
+  line-height:1.8;
+}
+
 .section-head{
   display:flex;
   align-items:center;
@@ -132,51 +184,73 @@ canvas{display:block;width:100%;height:100%;border-radius:50%}
   gap:10px;
   margin-bottom:12px;
 }
+
 .section-head h2{font-size:16px;margin:0}
+
 .badge{
-  background:#29294a;
-  color:var(--gold);
-  border-radius:30px;
   padding:6px 10px;
+  border-radius:20px;
+  background:#302b50;
+  color:var(--gold);
   font-size:12px;
 }
+
 textarea{
+  display:block;
   width:100%;
   min-height:125px;
-  resize:vertical;
-  border:1px solid #353d62;
+  padding:13px;
   border-radius:14px;
+  border:1px solid #3c4568;
   background:#0d1123;
   color:white;
-  padding:13px;
   outline:none;
+  resize:vertical;
+  font-family:inherit;
   font-size:15px;
   line-height:1.9;
 }
+
 textarea:focus{border-color:var(--purple)}
-.hint{text-align:right;color:var(--muted);font-size:12px;line-height:1.8}
+
+.hint{
+  text-align:right;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.8;
+}
+
 .row{display:flex;gap:9px}
 .row button{flex:1}
-.stats{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-  margin-bottom:16px;
+
+.row .primary{font-size:14px}
+
+.sound-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  text-align:right;
 }
-.stat{
-  padding:14px 8px;
-  border-radius:15px;
-  background:#ffffff08;
-  border:1px solid #ffffff0c;
+
+.sound-row strong{font-size:14px}
+.sound-row p{margin:5px 0 0;color:var(--muted);font-size:12px}
+
+.sound-toggle{
+  min-width:100px;
+  padding:11px 12px;
+  border-radius:12px;
+  background:#292f4e;
+  color:#fff;
 }
-.stat strong{display:block;font-size:23px;color:var(--gold);margin-bottom:6px}
-.stat span{font-size:12px;color:var(--muted)}
+
 .history{
   list-style:none;
   padding:0;
   margin:0;
   text-align:right;
 }
+
 .history li{
   display:flex;
   justify-content:space-between;
@@ -185,70 +259,82 @@ textarea:focus{border-color:var(--purple)}
   padding:12px 0;
   border-bottom:1px solid #ffffff12;
 }
+
 .history li:last-child{border-bottom:0}
-.history-name{overflow-wrap:anywhere;font-weight:bold}
+
+.history-name{font-weight:bold;overflow-wrap:anywhere}
 .history-date{font-size:11px;color:var(--muted);margin-top:5px}
-.history-remove{
-  border:0;
-  color:#ff9cba;
-  background:#ff6c8c18;
+
+.delete-winner{
   padding:8px 10px;
   border-radius:9px;
+  color:#ff9dbd;
+  background:#ff6c8c18;
 }
+
 .empty{color:var(--muted);font-size:13px;padding:15px 0}
-.small-btn{font-size:12px;padding:8px 10px}
-footer{color:#717b9e;font-size:11px;letter-spacing:1.5px;margin-top:25px}
+
 .modal{
-  display:none;
   position:fixed;
   inset:0;
-  z-index:20;
-  padding:20px;
+  z-index:10;
+  display:none;
   align-items:center;
   justify-content:center;
-  background:#050713dd;
+  padding:20px;
+  background:#050713df;
   backdrop-filter:blur(9px);
 }
+
 .modal.show{display:flex}
+
 .result{
   width:100%;
   max-width:350px;
-  padding:30px 20px;
+  padding:28px 20px;
   border:1px solid #8d80dc;
   border-radius:25px;
-  background:linear-gradient(145deg,#282c54,#11162c);
-  box-shadow:0 0 55px #a99aff35;
-  animation:pop .35s ease;
+  background:linear-gradient(145deg,#292e56,#11162d);
+  box-shadow:0 0 55px #a69aff35;
+  animation:appear .3s ease;
 }
-@keyframes pop{
-  from{opacity:0;transform:scale(.8)}
+
+@keyframes appear{
+  from{opacity:0;transform:scale(.85)}
   to{opacity:1;transform:scale(1)}
 }
-.trophy{font-size:55px}
+
+.trophy{font-size:56px}
 .result h2{color:var(--gold)}
 .winner-name{
+  margin:22px 0;
   font-size:clamp(25px,7vw,34px);
   font-weight:bold;
   overflow-wrap:anywhere;
-  margin:22px 0;
 }
-.result .primary{margin-top:10px}
-.result .secondary{width:100%;margin-top:9px}
+
+.result .secondary{width:100%;margin-top:10px}
+
 #confetti{
   position:fixed;
   inset:0;
   width:100%;
   height:100%;
+  z-index:20;
   pointer-events:none;
-  z-index:25;
 }
+
+footer{
+  margin-top:25px;
+  color:#7781a2;
+  font-size:11px;
+  letter-spacing:1.5px;
+}
+
 @media(max-width:360px){
   .card{padding:14px 10px}
   .wheel-wrap{padding:8px}
   .hub{width:48px;height:48px}
-}
-@media(prefers-reduced-motion:reduce){
-  *{scroll-behavior:auto!important}
 }
 </style>
 </head>
@@ -260,7 +346,7 @@ footer{color:#717b9e;font-size:11px;letter-spacing:1.5px;margin-top:25px}
 <header>
   <div class="logo">✦ PLAYZONE GAMES ✦</div>
   <h1>عجلة الحظ PRO</h1>
-  <p class="subtitle">لحظة حماس… واسم واحد يفوز! 🎯</p>
+  <p class="subtitle">أدر العجلة… واكتشف من هو الفائز! 🎯</p>
 </header>
 
 <main class="container">
@@ -284,7 +370,18 @@ footer{color:#717b9e;font-size:11px;letter-spacing:1.5px;margin-top:25px}
     </div>
 
     <button class="primary" id="spinBtn">🎡 أدر عجلة الحظ</button>
-    <p class="status" id="status">أضف أسماء المشاركين واستعد للحماس!</p>
+    <p class="status" id="status">أضف الأسماء واستعد للحماس!</p>
+  </section>
+
+  <section class="card">
+    <div class="sound-row">
+      <div>
+        <strong>🔊 أصوات المسابقات</strong>
+        <p id="soundStatus">الصوت مفعّل</p>
+      </div>
+      <button class="sound-toggle" id="soundToggle">🔊 كتم الصوت</button>
+    </div>
+    <p class="hint">يُستخدم ملف للدوران وآخر للفوز. أضف الملفين إلى جانب صفحة اللعبة.</p>
   </section>
 
   <section class="card">
@@ -294,10 +391,10 @@ footer{color:#717b9e;font-size:11px;letter-spacing:1.5px;margin-top:25px}
     </div>
 
     <textarea id="namesInput" placeholder="اكتب كل اسم في سطر منفصل"></textarea>
-    <p class="hint">اكتب اسم كل مشارك في سطر منفصل. يمكنك إضافة أسماء كثيرة.</p>
+    <p class="hint">اكتب اسم كل مشارك في سطر منفصل.</p>
 
     <div class="row">
-      <button class="primary" id="updateBtn" style="font-size:14px">تحديث الأسماء ✓</button>
+      <button class="primary" id="updateBtn">تحديث الأسماء ✓</button>
       <button class="secondary" id="clearBtn">مسح الكل</button>
     </div>
   </section>
@@ -305,21 +402,21 @@ footer{color:#717b9e;font-size:11px;letter-spacing:1.5px;margin-top:25px}
   <section class="card">
     <div class="section-head">
       <h2>🏆 سجل الفائزين</h2>
-      <button class="secondary small-btn" id="clearHistoryBtn">مسح السجل</button>
+      <button class="secondary" id="clearHistoryBtn">مسح السجل</button>
     </div>
 
     <ul class="history" id="historyList"></ul>
-    <p class="hint">يُحفظ السجل على هذا الجهاز باستخدام التخزين المحلي للمتصفح.</p>
+    <p class="hint">يُحفظ السجل محليًا على هذا الجهاز.</p>
   </section>
 
 </main>
 
 <footer>PLAYZONE WHEEL PRO · LET THE LUCK DECIDE</footer>
 
-<div class="modal" id="winnerModal" role="dialog" aria-modal="true" aria-labelledby="winnerHeading">
+<div class="modal" id="winnerModal" role="dialog" aria-modal="true">
   <div class="result">
     <div class="trophy">🏆</div>
-    <h2 id="winnerHeading">مبروك للفائز!</h2>
+    <h2>مبروك للفائز!</h2>
     <div class="winner-name" id="winnerName"></div>
     <p class="subtitle">الحظ اختار الفائز هذه المرة ✨</p>
     <button class="primary" id="closeModalBtn">رائع! 🎉</button>
@@ -327,490 +424,524 @@ footer{color:#717b9e;font-size:11px;letter-spacing:1.5px;margin-top:25px}
   </div>
 </div>
 
+<!-- ضع الملفين spin.mp3 و winner.mp3 في المجلد نفسه -->
+<audio id="spinAudio" src="spin.mp3" preload="auto" loop></audio>
+<audio id="winnerAudio" src="winner.mp3" preload="auto"></audio>
+
 <script>
 (() => {
-  "use strict";
+"use strict";
 
-  const $ = id => document.getElementById(id);
+const $ = id => document.getElementById(id);
 
-  const wheel = $("wheel");
-  const ctx = wheel.getContext("2d");
-  const input = $("namesInput");
-  const spinBtn = $("spinBtn");
-  const status = $("status");
+const canvas = $("wheel");
+const ctx = canvas.getContext("2d");
+const input = $("namesInput");
+const spinBtn = $("spinBtn");
 
-  const colors = [
-    "#fa587e", "#7164f5", "#f5a943", "#20bcae",
-    "#d95db9", "#348fe8", "#83bc42", "#f06c50",
-    "#9170e9", "#dfb53f", "#24abc9", "#d64d9b",
-    "#5e70d9", "#e78d42", "#3eac80", "#bc68e4"
-  ];
+const colors = [
+  "#fa587e","#7164f5","#f5a943","#20bcae",
+  "#d95db9","#348fe8","#83bc42","#f06c50",
+  "#9170e9","#dfb53f","#24abc9","#d64d9b",
+  "#5e70d9","#e78d42","#3eac80","#bc68e4"
+];
 
-  const defaultNames = ["أحمد", "محمد", "علي", "سارة", "خالد", "نور"];
+let names = ["أحمد","محمد","علي","سارة","خالد","نور"];
+let rotation = 0;
+let spinning = false;
+let soundEnabled = true;
+let audioContext = null;
+let tickTimer = null;
+let confettiFrame = null;
 
-  let names = [...defaultNames];
-  let rotation = 0;
-  let spinning = false;
-  let audioContext = null;
-  let tickTimer = null;
-  let confettiFrame = null;
-  let confettiPieces = [];
+const spinAudio = $("spinAudio");
+const winnerAudio = $("winnerAudio");
 
-  function loadStorage(key, fallback) {
-    try {
-      const value = localStorage.getItem(key);
-      return value ? JSON.parse(value) : fallback;
-    } catch (_) {
-      return fallback;
-    }
+function readStorage(key, fallback) {
+  try {
+    const value = localStorage.getItem(key);
+    return value ? JSON.parse(value) : fallback;
+  } catch (_) {
+    return fallback;
+  }
+}
+
+let history = readStorage("playzoneWheelHistoryV3", []);
+if (!Array.isArray(history)) history = [];
+
+function saveHistory() {
+  try {
+    localStorage.setItem(
+      "playzoneWheelHistoryV3",
+      JSON.stringify(history.slice(0,100))
+    );
+  } catch (_) {}
+}
+
+function updateStats() {
+  $("peopleCount").textContent = names.length;
+  $("namesBadge").textContent = names.length + " أسماء";
+  $("winsCount").textContent = history.length;
+}
+
+function drawWheel() {
+  const center = canvas.width / 2;
+  const radius = center - 8;
+
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+
+  if (!names.length) {
+    ctx.beginPath();
+    ctx.arc(center,center,radius,0,Math.PI*2);
+    ctx.fillStyle = "#262d4c";
+    ctx.fill();
+
+    ctx.fillStyle = "#fff";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.font = "bold 32px Arial";
+    ctx.fillText("أضف أسماءك",center,center);
+    return;
   }
 
-  let history = loadStorage("playzoneWheelHistoryV2", []);
+  const slice = Math.PI*2/names.length;
 
-  if (!Array.isArray(history)) history = [];
+  ctx.save();
+  ctx.translate(center,center);
+  ctx.rotate(rotation);
 
-  function saveHistory() {
-    try {
-      localStorage.setItem(
-        "playzoneWheelHistoryV2",
-        JSON.stringify(history.slice(0, 100))
-      );
-    } catch (_) {
-      status.textContent = "تعذّر حفظ السجل على هذا الجهاز.";
-    }
-  }
-
-  function updateStats() {
-    $("peopleCount").textContent = names.length;
-    $("namesBadge").textContent = names.length + " أسماء";
-    $("winsCount").textContent = history.length;
-  }
-
-  function drawWheel() {
-    const size = wheel.width;
-    const center = size / 2;
-    const radius = size / 2 - 8;
-
-    ctx.clearRect(0, 0, size, size);
-
-    if (!names.length) {
-      ctx.beginPath();
-      ctx.arc(center, center, radius, 0, Math.PI * 2);
-      ctx.fillStyle = "#262d4c";
-      ctx.fill();
-
-      ctx.fillStyle = "#ffffff";
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      ctx.font = "bold 32px Arial";
-      ctx.fillText("أضف أسماءك", center, center);
-      return;
-    }
-
-    const slice = Math.PI * 2 / names.length;
-
-    ctx.save();
-    ctx.translate(center, center);
-    ctx.rotate(rotation);
-
-    names.forEach((name, index) => {
-      const start = index * slice;
-      const end = start + slice;
-
-      ctx.beginPath();
-      ctx.moveTo(0, 0);
-      ctx.arc(0, 0, radius, start, end);
-      ctx.closePath();
-      ctx.fillStyle = colors[index % colors.length];
-      ctx.fill();
-
-      ctx.strokeStyle = "#ffffff65";
-      ctx.lineWidth = 3;
-      ctx.stroke();
-
-      ctx.save();
-      ctx.rotate(start + slice / 2);
-      ctx.textAlign = "right";
-      ctx.textBaseline = "middle";
-      ctx.fillStyle = "#ffffff";
-      ctx.shadowColor = "#0008";
-      ctx.shadowBlur = 4;
-
-      const fontSize = names.length > 20 ? 15 :
-                       names.length > 12 ? 19 :
-                       names.length > 7 ? 24 : 28;
-
-      ctx.font = `bold ${fontSize}px Arial`;
-
-      let label = name;
-      const maxWidth = radius * 0.70;
-
-      while (ctx.measureText(label).width > maxWidth && label.length > 2) {
-        label = label.slice(0, -1);
-      }
-
-      if (label !== name) label += "…";
-
-      ctx.fillText(label, radius - 25, 0);
-      ctx.restore();
-    });
-
-    ctx.restore();
+  names.forEach((name,index) => {
+    const start = index*slice;
+    const end = start+slice;
 
     ctx.beginPath();
-    ctx.arc(center, center, radius, 0, Math.PI * 2);
-    ctx.strokeStyle = "#ffffff";
-    ctx.lineWidth = 5;
+    ctx.moveTo(0,0);
+    ctx.arc(0,0,radius,start,end);
+    ctx.closePath();
+    ctx.fillStyle = colors[index%colors.length];
+    ctx.fill();
+
+    ctx.strokeStyle = "#ffffff75";
+    ctx.lineWidth = 3;
     ctx.stroke();
-  }
 
-  function updateNames() {
-    if (spinning) return;
+    ctx.save();
+    ctx.rotate(start+slice/2);
+    ctx.textAlign = "right";
+    ctx.textBaseline = "middle";
+    ctx.fillStyle = "#fff";
+    ctx.shadowColor = "#0008";
+    ctx.shadowBlur = 4;
 
-    const newNames = input.value
-      .split(/\n/)
-      .map(name => name.trim())
-      .filter(Boolean);
+    const fontSize = names.length>20 ? 15 :
+                     names.length>12 ? 19 :
+                     names.length>7 ? 23 : 28;
 
-    if (newNames.length < 2) {
-      status.textContent = "⚠️ أدخل اسمين على الأقل لتدوير العجلة.";
-      return;
+    ctx.font = `bold ${fontSize}px Arial`;
+
+    let label = name;
+    const maxWidth = radius*.7;
+
+    while(ctx.measureText(label).width>maxWidth && label.length>2){
+      label = label.slice(0,-1);
     }
 
-    if (newNames.length > 100) {
-      status.textContent = "⚠️ الحد الأقصى هو 100 مشارك.";
-      return;
-    }
+    if(label!==name) label += "…";
 
-    names = newNames;
-    rotation = 0;
-
-    drawWheel();
-    updateStats();
-
-    status.textContent = `تم تجهيز العجلة بـ ${names.length} مشاركًا ✓`;
-  }
-
-  function clearNames() {
-    if (spinning) return;
-
-    names = [];
-    input.value = "";
-    rotation = 0;
-
-    drawWheel();
-    updateStats();
-
-    status.textContent = "تم مسح الأسماء. أضف مشاركين للبدء.";
-  }
-
-  function getAudio() {
-    const AudioCtx = window.AudioContext || window.webkitAudioContext;
-
-    if (!AudioCtx) return null;
-
-    if (!audioContext) audioContext = new AudioCtx();
-
-    if (audioContext.state === "suspended") {
-      audioContext.resume().catch(() => {});
-    }
-
-    return audioContext;
-  }
-
-  function beep(frequency, duration, volume = 0.035, type = "sine") {
-    const audio = getAudio();
-    if (!audio) return;
-
-    try {
-      const oscillator = audio.createOscillator();
-      const gain = audio.createGain();
-
-      oscillator.type = type;
-      oscillator.frequency.setValueAtTime(frequency, audio.currentTime);
-
-      gain.gain.setValueAtTime(volume, audio.currentTime);
-      gain.gain.exponentialRampToValueAtTime(
-        0.001,
-        audio.currentTime + duration
-      );
-
-      oscillator.connect(gain);
-      gain.connect(audio.destination);
-
-      oscillator.start();
-      oscillator.stop(audio.currentTime + duration);
-    } catch (_) {}
-  }
-
-  function playWinSound() {
-    beep(523, 0.18, 0.05);
-    setTimeout(() => beep(659, 0.18, 0.05), 140);
-    setTimeout(() => beep(784, 0.22, 0.05), 280);
-    setTimeout(() => beep(1047, 0.45, 0.06), 430);
-  }
-
-  function startTicks(duration) {
-    const start = performance.now();
-
-    function tick() {
-      if (!spinning) return;
-
-      const elapsed = performance.now() - start;
-      const progress = Math.min(elapsed / duration, 1);
-      const frequency = 280 + progress * 140;
-
-      beep(frequency, 0.025, 0.012, "square");
-
-      const delay = 65 + progress * 200;
-      tickTimer = setTimeout(tick, delay);
-    }
-
-    tick();
-  }
-
-  function stopTicks() {
-    if (tickTimer) clearTimeout(tickTimer);
-    tickTimer = null;
-  }
-
-  function launchConfetti() {
-    const canvas = $("confetti");
-    const c = canvas.getContext("2d");
-
-    if (confettiFrame) cancelAnimationFrame(confettiFrame);
-
-    canvas.width = window.innerWidth * Math.min(window.devicePixelRatio || 1, 2);
-    canvas.height = window.innerHeight * Math.min(window.devicePixelRatio || 1, 2);
-
-    c.setTransform(
-      Math.min(window.devicePixelRatio || 1, 2), 0,
-      0, Math.min(window.devicePixelRatio || 1, 2), 0, 0
-    );
-
-    const w = window.innerWidth;
-    const h = window.innerHeight;
-    const palette = ["#ffd66b", "#ff83c8", "#a99aff", "#7ee7db", "#ffffff"];
-
-    confettiPieces = Array.from({length: 150}, () => ({
-      x: Math.random() * w,
-      y: -Math.random() * h * 0.8,
-      vx: (Math.random() - 0.5) * 4,
-      vy: 2 + Math.random() * 5,
-      size: 4 + Math.random() * 6,
-      angle: Math.random() * 6,
-      spin: (Math.random() - 0.5) * 0.2,
-      color: palette[Math.floor(Math.random() * palette.length)]
-    }));
-
-    const start = performance.now();
-
-    function frame(now) {
-      c.clearRect(0, 0, w, h);
-
-      confettiPieces.forEach(piece => {
-        piece.x += piece.vx;
-        piece.y += piece.vy;
-        piece.angle += piece.spin;
-        piece.vy += 0.025;
-
-        c.save();
-        c.translate(piece.x, piece.y);
-        c.rotate(piece.angle);
-        c.fillStyle = piece.color;
-        c.fillRect(-piece.size / 2, -piece.size / 2,
-                   piece.size, piece.size * 1.5);
-        c.restore();
-      });
-
-      if (now - start < 4500) {
-        confettiFrame = requestAnimationFrame(frame);
-      } else {
-        c.clearRect(0, 0, w, h);
-        confettiFrame = null;
-      }
-    }
-
-    confettiFrame = requestAnimationFrame(frame);
-  }
-
-  function renderHistory() {
-    const list = $("historyList");
-    list.innerHTML = "";
-
-    if (!history.length) {
-      const li = document.createElement("li");
-      li.className = "empty";
-      li.textContent = "لم يتم اختيار أي فائز بعد.";
-      list.appendChild(li);
-    } else {
-      history.slice(0, 20).forEach((item, index) => {
-        const li = document.createElement("li");
-        const details = document.createElement("div");
-
-        const name = document.createElement("div");
-        name.className = "history-name";
-        name.textContent = `🏆 ${item.name}`;
-
-        const date = document.createElement("div");
-        date.className = "history-date";
-        date.textContent = item.date || "";
-
-        details.appendChild(name);
-        details.appendChild(date);
-
-        const remove = document.createElement("button");
-        remove.className = "history-remove";
-        remove.textContent = "حذف";
-        remove.setAttribute("aria-label", "حذف سجل الفائز " + item.name);
-
-        remove.addEventListener("click", () => {
-          history.splice(index, 1);
-          saveHistory();
-          renderHistory();
-          updateStats();
-        });
-
-        li.appendChild(details);
-        li.appendChild(remove);
-        list.appendChild(li);
-      });
-    }
-
-    updateStats();
-  }
-
-  function showWinner(name) {
-    $("winnerName").textContent = name;
-    $("winnerModal").classList.add("show");
-
-    history.unshift({
-      name,
-      date: new Date().toLocaleString("ar", {
-        dateStyle: "medium",
-        timeStyle: "short"
-      })
-    });
-
-    history = history.slice(0, 100);
-    saveHistory();
-    renderHistory();
-
-    launchConfetti();
-    playWinSound();
-  }
-
-  function closeModal() {
-    $("winnerModal").classList.remove("show");
-  }
-
-  function spinWheel() {
-    if (spinning) return;
-
-    if (names.length < 2) {
-      status.textContent = "⚠️ أضف اسمين على الأقل واضغط تحديث الأسماء.";
-      return;
-    }
-
-    // بدء الصوت بعد تفاعل المستخدم مع الزر
-    getAudio();
-
-    spinning = true;
-    spinBtn.disabled = true;
-    $("updateBtn").disabled = true;
-    $("clearBtn").disabled = true;
-
-    status.textContent = "🎡 العجلة تدور… من سيكون الفائز؟";
-
-    const slice = 2 * Math.PI / names.length;
-    const winnerIndex = Math.floor(Math.random() * names.length);
-
-    // المؤشر أعلى العجلة، عند زاوية -π/2
-    const target = -Math.PI / 2 - (winnerIndex + 0.5) * slice;
-
-    const current = ((rotation % (2 * Math.PI)) + 2 * Math.PI)
-                    % (2 * Math.PI);
-
-    const targetNormalized = ((target % (2 * Math.PI)) + 2 * Math.PI)
-                             % (2 * Math.PI);
-
-    const delta = (targetNormalized - current + 2 * Math.PI)
-                  % (2 * Math.PI);
-
-    const fullTurns = (6 + Math.floor(Math.random() * 4)) * 2 * Math.PI;
-    const total = fullTurns + delta;
-    const startRotation = rotation;
-    const duration = 5200;
-    const startTime = performance.now();
-
-    startTicks(duration);
-
-    function animate(now) {
-      const progress = Math.min((now - startTime) / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 5);
-
-      rotation = startRotation + total * eased;
-      drawWheel();
-
-      if (progress < 1) {
-        requestAnimationFrame(animate);
-      } else {
-        rotation = ((rotation % (2 * Math.PI)) + 2 * Math.PI)
-                   % (2 * Math.PI);
-
-        drawWheel();
-
-        spinning = false;
-        spinBtn.disabled = false;
-        $("updateBtn").disabled = false;
-        $("clearBtn").disabled = false;
-
-        stopTicks();
-
-        const winner = names[winnerIndex];
-
-        status.textContent = `🏆 الفائز هو: ${winner}`;
-        showWinner(winner);
-      }
-    }
-
-    requestAnimationFrame(animate);
-  }
-
-  $("spinBtn").addEventListener("click", spinWheel);
-  $("updateBtn").addEventListener("click", updateNames);
-  $("clearBtn").addEventListener("click", clearNames);
-  $("closeModalBtn").addEventListener("click", closeModal);
-
-  $("spinAgainBtn").addEventListener("click", () => {
-    closeModal();
-    spinWheel();
+    ctx.fillText(label,radius-25,0);
+    ctx.restore();
   });
 
-  $("clearHistoryBtn").addEventListener("click", () => {
-    if (!history.length) {
-      status.textContent = "سجل الفائزين فارغ بالفعل.";
-      return;
-    }
+  ctx.restore();
 
-    if (!window.confirm("هل تريد مسح سجل الفائزين بالكامل؟")) return;
+  ctx.beginPath();
+  ctx.arc(center,center,radius,0,Math.PI*2);
+  ctx.strokeStyle = "#fff";
+  ctx.lineWidth = 5;
+  ctx.stroke();
+}
 
-    history = [];
-    saveHistory();
-    renderHistory();
+function updateNames() {
+  if(spinning) return;
 
-    status.textContent = "تم مسح سجل الفائزين.";
-  });
+  const entered = input.value
+    .split(/\n/)
+    .map(name=>name.trim())
+    .filter(Boolean);
 
-  $("winnerModal").addEventListener("click", event => {
-    if (event.target === $("winnerModal")) closeModal();
-  });
+  if(entered.length<2){
+    $("status").textContent = "⚠️ أدخل اسمين على الأقل.";
+    return;
+  }
 
-  input.value = names.join("\n");
+  if(entered.length>100){
+    $("status").textContent = "⚠️ الحد الأقصى 100 مشارك.";
+    return;
+  }
+
+  names = entered;
+  rotation = 0;
 
   drawWheel();
-  renderHistory();
   updateStats();
+
+  $("status").textContent = `تم تجهيز العجلة بـ ${names.length} مشاركًا ✓`;
+}
+
+function clearNames() {
+  if(spinning) return;
+
+  names = [];
+  input.value = "";
+  rotation = 0;
+
+  drawWheel();
+  updateStats();
+
+  $("status").textContent = "تم مسح الأسماء. أضف أسماء جديدة.";
+}
+
+function stopSpinSound() {
+  spinAudio.pause();
+  try { spinAudio.currentTime = 0; } catch (_) {}
+  if(tickTimer) clearTimeout(tickTimer);
+  tickTimer = null;
+}
+
+function playTick() {
+  if(!soundEnabled || !spinning) return;
+
+  // نقرات قصيرة تُولّد داخل المتصفح لمحاكاة نقرة العجلة
+  const AudioCtx = window.AudioContext || window.webkitAudioContext;
+  if(!AudioCtx) return;
+
+  try {
+    if(!audioContext) audioContext = new AudioCtx();
+    if(audioContext.state==="suspended") audioContext.resume();
+
+    const osc = audioContext.createOscillator();
+    const gain = audioContext.createGain();
+
+    osc.type = "square";
+    osc.frequency.value = 900;
+
+    gain.gain.setValueAtTime(.018,audioContext.currentTime);
+    gain.gain.exponentialRampToValueAtTime(
+      .001,audioContext.currentTime+.025
+    );
+
+    osc.connect(gain);
+    gain.connect(audioContext.destination);
+    osc.start();
+    osc.stop(audioContext.currentTime+.03);
+  } catch (_) {}
+}
+
+function startTicks(duration) {
+  const start = performance.now();
+
+  function tick() {
+    if(!spinning || !soundEnabled) return;
+
+    const progress = Math.min((performance.now()-start)/duration,1);
+    playTick();
+
+    tickTimer = setTimeout(tick,55+progress*210);
+  }
+
+  tick();
+}
+
+function playWinnerSound() {
+  if(!soundEnabled) return;
+
+  winnerAudio.currentTime = 0;
+  winnerAudio.volume = .85;
+
+  // يعمل عند وجود winner.mp3؛ وإلا يستخدم نغمة احتياطية.
+  winnerAudio.play().catch(() => {
+    playFallbackWin();
+  });
+}
+
+function playFallbackWin() {
+  if(!soundEnabled) return;
+
+  const AudioCtx = window.AudioContext || window.webkitAudioContext;
+  if(!AudioCtx) return;
+
+  try {
+    if(!audioContext) audioContext = new AudioCtx();
+    if(audioContext.state==="suspended") audioContext.resume();
+
+    const notes = [
+      [523.25,0,.2],
+      [659.25,.16,.2],
+      [783.99,.32,.25],
+      [1046.5,.52,.55]
+    ];
+
+    notes.forEach(([freq,delay,duration]) => {
+      const osc = audioContext.createOscillator();
+      const gain = audioContext.createGain();
+      const start = audioContext.currentTime+delay;
+
+      osc.type = "triangle";
+      osc.frequency.setValueAtTime(freq,start);
+
+      gain.gain.setValueAtTime(.001,start);
+      gain.gain.linearRampToValueAtTime(.09,start+.025);
+      gain.gain.exponentialRampToValueAtTime(.001,start+duration);
+
+      osc.connect(gain);
+      gain.connect(audioContext.destination);
+      osc.start(start);
+      osc.stop(start+duration);
+    });
+  } catch (_) {}
+}
+
+function launchConfetti() {
+  const ccanvas = $("confetti");
+  const c = ccanvas.getContext("2d");
+  const ratio = Math.min(window.devicePixelRatio||1,2);
+  const w = window.innerWidth;
+  const h = window.innerHeight;
+
+  if(confettiFrame) cancelAnimationFrame(confettiFrame);
+
+  ccanvas.width = w*ratio;
+  ccanvas.height = h*ratio;
+  c.setTransform(ratio,0,0,ratio,0,0);
+
+  const palette = ["#ffd66b","#ff83c8","#a99aff","#7ee7db","#fff"];
+
+  const pieces = Array.from({length:140},()=>({
+    x:Math.random()*w,
+    y:-Math.random()*h*.7,
+    vx:(Math.random()-.5)*4,
+    vy:2+Math.random()*5,
+    size:4+Math.random()*6,
+    angle:Math.random()*6,
+    spin:(Math.random()-.5)*.2,
+    color:palette[Math.floor(Math.random()*palette.length)]
+  }));
+
+  const start = performance.now();
+
+  function frame(now) {
+    c.clearRect(0,0,w,h);
+
+    pieces.forEach(p=>{
+      p.x += p.vx;
+      p.y += p.vy;
+      p.angle += p.spin;
+      p.vy += .025;
+
+      c.save();
+      c.translate(p.x,p.y);
+      c.rotate(p.angle);
+      c.fillStyle = p.color;
+      c.fillRect(-p.size/2,-p.size/2,p.size,p.size*1.5);
+      c.restore();
+    });
+
+    if(now-start<4000){
+      confettiFrame=requestAnimationFrame(frame);
+    }else{
+      c.clearRect(0,0,w,h);
+      confettiFrame=null;
+    }
+  }
+
+  confettiFrame=requestAnimationFrame(frame);
+}
+
+function renderHistory() {
+  const list = $("historyList");
+  list.innerHTML = "";
+
+  if(!history.length){
+    const li = document.createElement("li");
+    li.className = "empty";
+    li.textContent = "لم يتم اختيار أي فائز بعد.";
+    list.appendChild(li);
+  }else{
+    history.slice(0,20).forEach((item,index)=>{
+      const li = document.createElement("li");
+      const details = document.createElement("div");
+
+      const name = document.createElement("div");
+      name.className = "history-name";
+      name.textContent = "🏆 "+item.name;
+
+      const date = document.createElement("div");
+      date.className = "history-date";
+      date.textContent = item.date||"";
+
+      details.append(name,date);
+
+      const remove = document.createElement("button");
+      remove.className = "delete-winner";
+      remove.textContent = "حذف";
+
+      remove.addEventListener("click",()=>{
+        history.splice(index,1);
+        saveHistory();
+        renderHistory();
+        updateStats();
+      });
+
+      li.append(details,remove);
+      list.appendChild(li);
+    });
+  }
+
+  updateStats();
+}
+
+function showWinner(name) {
+  $("winnerName").textContent = name;
+  $("winnerModal").classList.add("show");
+
+  history.unshift({
+    name,
+    date:new Date().toLocaleString("ar",{
+      dateStyle:"medium",
+      timeStyle:"short"
+    })
+  });
+
+  history = history.slice(0,100);
+
+  saveHistory();
+  renderHistory();
+  launchConfetti();
+  playWinnerSound();
+}
+
+function closeModal() {
+  $("winnerModal").classList.remove("show");
+}
+
+function spinWheel() {
+  if(spinning) return;
+
+  if(names.length<2){
+    $("status").textContent = "⚠️ أضف اسمين على الأقل.";
+    return;
+  }
+
+  spinning = true;
+  spinBtn.disabled = true;
+  $("updateBtn").disabled = true;
+  $("clearBtn").disabled = true;
+
+  $("status").textContent = "🎡 العجلة تدور… من سيكون الفائز؟";
+
+  winnerAudio.pause();
+  winnerAudio.currentTime = 0;
+
+  if(soundEnabled){
+    spinAudio.currentTime = 0;
+    spinAudio.volume = .55;
+    spinAudio.playbackRate = 1;
+    spinAudio.play().catch(()=>{});
+    startTicks(5200);
+  }
+
+  const slice = Math.PI*2/names.length;
+  const winnerIndex = Math.floor(Math.random()*names.length);
+
+  // المؤشر ثابت أعلى العجلة.
+  const target = -Math.PI/2-(winnerIndex+.5)*slice;
+  const current = ((rotation%(Math.PI*2))+Math.PI*2)%(Math.PI*2);
+  const normalizedTarget = ((target%(Math.PI*2))+Math.PI*2)%(Math.PI*2);
+  const delta = (normalizedTarget-current+Math.PI*2)%(Math.PI*2);
+
+  const turns = (6+Math.floor(Math.random()*4))*Math.PI*2;
+  const total = turns+delta;
+  const startRotation = rotation;
+  const duration = 5200;
+  const startTime = performance.now();
+
+  function animate(now) {
+    const progress = Math.min((now-startTime)/duration,1);
+    const eased = 1-Math.pow(1-progress,5);
+
+    rotation = startRotation+total*eased;
+    drawWheel();
+
+    if(progress<1){
+      requestAnimationFrame(animate);
+    }else{
+      rotation = ((rotation%(Math.PI*2))+Math.PI*2)%(Math.PI*2);
+      drawWheel();
+
+      spinning = false;
+      spinBtn.disabled = false;
+      $("updateBtn").disabled = false;
+      $("clearBtn").disabled = false;
+
+      stopSpinSound();
+
+      const winner = names[winnerIndex];
+      $("status").textContent = "🏆 الفائز هو: "+winner;
+      showWinner(winner);
+    }
+  }
+
+  requestAnimationFrame(animate);
+}
+
+$("spinBtn").addEventListener("click",spinWheel);
+$("updateBtn").addEventListener("click",updateNames);
+$("clearBtn").addEventListener("click",clearNames);
+
+$("closeModalBtn").addEventListener("click",closeModal);
+
+$("spinAgainBtn").addEventListener("click",()=>{
+  closeModal();
+  spinWheel();
+});
+
+$("winnerModal").addEventListener("click",e=>{
+  if(e.target===$("winnerModal")) closeModal();
+});
+
+$("clearHistoryBtn").addEventListener("click",()=>{
+  if(!history.length){
+    $("status").textContent = "السجل فارغ بالفعل.";
+    return;
+  }
+
+  if(!confirm("هل تريد مسح سجل الفائزين بالكامل؟")) return;
+
+  history = [];
+  saveHistory();
+  renderHistory();
+  $("status").textContent = "تم مسح سجل الفائزين.";
+});
+
+$("soundToggle").addEventListener("click",()=>{
+  soundEnabled = !soundEnabled;
+
+  if(!soundEnabled){
+    stopSpinSound();
+    winnerAudio.pause();
+    $("soundToggle").textContent = "🔇 تشغيل الصوت";
+    $("soundStatus").textContent = "الصوت مكتوم";
+  }else{
+    $("soundToggle").textContent = "🔊 كتم الصوت";
+    $("soundStatus").textContent = "الصوت مفعّل";
+  }
+});
+
+input.value = names.join("\n");
+drawWheel();
+renderHistory();
+updateStats();
+
 })();
 </script>
 
