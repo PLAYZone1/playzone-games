@@ -2,521 +2,517 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#080b0a">
-<meta name="description" content="PlayZone Games - Free online browser games">
-<title>PlayZone Games</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>عجلة الحظ | PlayZone</title>
+
 <style>
-:root{
-  --bg:#080b0a;
-  --card:#131a15;
-  --green:#a3ff12;
-  --text:#f5f7f4;
-  --muted:#a5b0a7;
-  --border:#29362c;
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
-*{box-sizing:border-box}
-body{
-  margin:0;
-  background:radial-gradient(ellipse at top,#172319,var(--bg) 55%);
-  color:var(--text);
-  font-family:Arial,Tahoma,sans-serif;
-  line-height:1.6;
+
+body {
+    font-family: Arial, sans-serif;
+    background: radial-gradient(circle at top, #202957, #090d1e 75%);
+    color: white;
+    min-height: 100vh;
+    text-align: center;
+    padding: 22px 15px 40px;
 }
-a{text-decoration:none;color:inherit}
-button,input{font:inherit}
-button{cursor:pointer}
-.container{width:min(1100px,92%);margin:auto}
-header{
-  position:sticky;
-  top:0;
-  z-index:10;
-  background:#080b0aee;
-  backdrop-filter:blur(12px);
-  border-bottom:1px solid var(--border);
+
+header {
+    margin-bottom: 25px;
 }
-nav{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:12px;
-  min-height:70px;
+
+.logo {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    color: #9daaff;
+    border: 1px solid #414b80;
+    padding: 9px 17px;
+    border-radius: 30px;
+    margin-bottom: 17px;
 }
-.logo{font-size:22px;font-weight:900}
-.logo span{color:var(--green)}
-.navlinks{display:flex;gap:18px;font-size:14px}
-.navlinks a:hover{color:var(--green)}
-.lang{
-  background:var(--card);
-  border:1px solid var(--border);
-  color:var(--green);
-  padding:8px 12px;
-  border-radius:10px;
-  font-weight:bold;
+
+h1 {
+    font-size: clamp(30px, 7vw, 45px);
+    margin-bottom: 10px;
+    background: linear-gradient(90deg, #ffdc72, #ff8ecf, #a9a4ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
 }
-.hero{
-  display:grid;
-  grid-template-columns:1.2fr .8fr;
-  gap:25px;
-  align-items:center;
-  padding:55px 0 35px;
+
+.subtitle {
+    color: #aeb8d7;
+    font-size: 14px;
+    line-height: 1.8;
 }
-.label{
-  display:inline-block;
-  color:var(--green);
-  border:1px solid #a3ff1240;
-  background:#a3ff1210;
-  border-radius:30px;
-  padding:5px 12px;
-  font-size:13px;
+
+.game {
+    max-width: 480px;
+    margin: auto;
+    background: rgba(255,255,255,.055);
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 28px;
+    padding: 23px 16px;
+    box-shadow: 0 20px 60px rgba(0,0,0,.3);
 }
-h1{font-size:clamp(34px,5vw,60px);line-height:1.2;margin:18px 0}
-.green{color:var(--green)}
-.hero p{color:var(--muted);max-width:550px}
-.btn{
-  display:inline-block;
-  border:0;
-  border-radius:11px;
-  padding:12px 17px;
-  font-weight:bold;
-  margin:5px 3px;
+
+.wheel-area {
+    position: relative;
+    width: min(100%, 360px);
+    aspect-ratio: 1;
+    margin: 0 auto 22px;
+    padding: 12px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ffd76a, #ff83d0, #8e8cff, #ffd76a);
+    box-shadow: 0 0 35px rgba(139,128,255,.22);
 }
-.primary{background:var(--green);color:#10150b}
-.secondary{background:var(--card);border:1px solid var(--border);color:white}
-.hero-art{
-  min-height:250px;
-  border:1px solid var(--border);
-  border-radius:25px;
-  background:radial-gradient(circle,#29451f,#101710 65%);
-  display:grid;
-  place-items:center;
-  font-size:105px;
+
+canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+    border-radius: 50%;
 }
-.stats{display:flex;gap:10px;margin-top:25px}
-.stat{
-  flex:1;
-  text-align:center;
-  padding:12px 5px;
-  border:1px solid var(--border);
-  border-radius:12px;
-  background:#101511;
+
+.pointer {
+    position: absolute;
+    top: -3px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 17px solid transparent;
+    border-right: 17px solid transparent;
+    border-top: 32px solid #fff4bd;
+    filter: drop-shadow(0 4px 5px rgba(0,0,0,.5));
+    z-index: 3;
 }
-.stat strong{display:block;color:var(--green);font-size:19px}
-.stat small{color:var(--muted)}
-section{padding:25px 0}
-.section-title{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:15px;
-  margin-bottom:18px;
+
+.center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 57px;
+    height: 57px;
+    border-radius: 50%;
+    background: #fff;
+    color: #171b38;
+    display: grid;
+    place-items: center;
+    font-size: 25px;
+    border: 5px solid #ffdc72;
+    box-shadow: 0 0 20px rgba(0,0,0,.35);
+    pointer-events: none;
 }
-h2{font-size:25px;margin:0}
-.search{
-  width:270px;
-  max-width:100%;
-  padding:11px 13px;
-  border:1px solid var(--border);
-  border-radius:12px;
-  color:white;
-  background:var(--card);
-  outline:none;
+
+button {
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: transform .15s, opacity .2s;
 }
-.search:focus{border-color:var(--green)}
-.categories{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
-.chip{
-  border:1px solid var(--border);
-  background:var(--card);
-  color:#c5cec7;
-  padding:8px 14px;
-  border-radius:25px;
+
+button:active {
+    transform: scale(.97);
 }
-.chip.active,.chip:hover{
-  color:var(--green);
-  border-color:var(--green);
+
+.spin {
+    width: 100%;
+    padding: 17px;
+    border-radius: 17px;
+    color: #15162b;
+    background: linear-gradient(100deg, #ffdc72, #ff9bcf);
+    box-shadow: 0 7px 24px rgba(255,154,204,.17);
+    font-size: 19px;
 }
-.grid{
-  display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:15px;
+
+.spin:disabled {
+    opacity: .5;
+    cursor: not-allowed;
 }
-.game{
-  overflow:hidden;
-  background:linear-gradient(145deg,#172019,#101411);
-  border:1px solid var(--border);
-  border-radius:17px;
-  transition:.2s;
+
+.section-title {
+    text-align: right;
+    font-size: 17px;
+    margin: 24px 0 12px;
 }
-.game:hover{transform:translateY(-4px);border-color:#7dbb31}
-.cover{
-  height:145px;
-  display:grid;
-  place-items:center;
-  font-size:65px;
-  background:radial-gradient(circle,#345624,#172019);
+
+textarea {
+    width: 100%;
+    min-height: 115px;
+    background: #10162e;
+    border: 1px solid #343e68;
+    color: white;
+    border-radius: 15px;
+    padding: 14px;
+    font-size: 15px;
+    line-height: 1.8;
+    resize: vertical;
+    outline: none;
 }
-.cover.blue{background:radial-gradient(circle,#1b5261,#101820)}
-.cover.purple{background:radial-gradient(circle,#563477,#201729)}
-.cover.orange{background:radial-gradient(circle,#7b461b,#28180e)}
-.cover.pink{background:radial-gradient(circle,#74304e,#28151f)}
-.cover.teal{background:radial-gradient(circle,#17634f,#10231b)}
-.game-info{padding:13px}
-.game h3{margin:0 0 5px;font-size:17px}
-.game p{font-size:13px;color:var(--muted);min-height:40px;margin:0 0 12px}
-.play{
-  display:block;
-  width:100%;
-  padding:10px;
-  border:0;
-  border-radius:9px;
-  background:var(--green);
-  color:#10150b;
-  font-weight:900;
+
+textarea:focus {
+    border-color: #a19bff;
 }
-.play:hover{filter:brightness(1.1)}
-.external-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}
-.external{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:15px;
-  padding:17px;
+
+.hint {
+    text-align: right;
+    color: #929dbf;
+    font-size: 12px;
+    margin: 8px 2px 12px;
 }
-.external h3{margin:0 0 5px}
-.external p{font-size:13px;color:var(--muted);margin:0 0 10px}
-.external a{color:var(--green);font-weight:bold}
-.ad-space{
-  min-height:100px;
-  display:grid;
-  place-items:center;
-  border:1px dashed #41503e;
-  color:var(--muted);
-  border-radius:15px;
-  margin:20px 0;
-  text-align:center;
-  padding:15px;
+
+.actions {
+    display: flex;
+    gap: 9px;
 }
-footer{
-  margin-top:25px;
-  border-top:1px solid var(--border);
-  padding:25px 0;
-  color:var(--muted);
-  font-size:13px;
+
+.actions button {
+    flex: 1;
+    padding: 13px 8px;
+    border-radius: 12px;
 }
-.footer-row{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
-.modal{
-  display:none;
-  position:fixed;
-  inset:0;
-  z-index:30;
-  background:#000c;
-  align-items:center;
-  justify-content:center;
-  padding:15px;
+
+.update {
+    background: #a49aff;
+    color: #15152b;
 }
-.modal.open{display:flex}
-.modal-box{
-  width:min(500px,100%);
-  background:#101611;
-  border:1px solid #41513e;
-  border-radius:20px;
-  padding:20px;
-  text-align:center;
+
+.clear {
+    background: #292f4d;
+    color: #e2e5ff;
 }
-.modal-top{display:flex;justify-content:space-between;align-items:center}
-.modal-top h2{font-size:21px}
-.close{
-  border:1px solid var(--border);
-  border-radius:9px;
-  color:white;
-  background:var(--card);
-  padding:5px 12px;
-  font-size:22px;
+
+.status {
+    color: #abb5d5;
+    margin-top: 15px;
+    font-size: 13px;
 }
-.modal-box p{color:var(--muted)}
-.modal-box input{
-  background:#080b0a;
-  color:white;
-  border:1px solid var(--border);
-  border-radius:9px;
-  padding:10px;
-  width:120px;
-  text-align:center;
+
+footer {
+    color: #7782a7;
+    margin-top: 25px;
+    font-size: 12px;
+    letter-spacing: 1px;
 }
-.result{color:var(--green);font-weight:bold;min-height:30px;margin-top:12px}
-.big{font-size:60px;margin:12px}
-@media(max-width:700px){
-  .navlinks{display:none}
-  .hero{grid-template-columns:1fr;padding-top:35px}
-  .hero-art{min-height:170px;font-size:75px}
-  .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-  .cover{height:115px;font-size:48px}
-  .game-info{padding:10px}
-  .game h3{font-size:15px}
-  .game p{font-size:12px;min-height:55px}
-  .external-grid{grid-template-columns:1fr}
-  .section-title{align-items:stretch;flex-direction:column}
-  .search{width:100%}
-  h2{font-size:22px}
+
+.modal {
+    position: fixed;
+    inset: 0;
+    z-index: 10;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(4,7,20,.82);
+    backdrop-filter: blur(8px);
 }
-@media(max-width:350px){
-  .grid{grid-template-columns:1fr}
+
+.modal.show {
+    display: flex;
+}
+
+.result {
+    width: 100%;
+    max-width: 340px;
+    padding: 30px 20px;
+    background: linear-gradient(145deg, #252d55, #151a34);
+    border: 1px solid #7770bd;
+    border-radius: 25px;
+    box-shadow: 0 0 60px rgba(146,126,255,.2);
+    animation: appear .35s ease;
+}
+
+@keyframes appear {
+    from { opacity: 0; transform: scale(.8); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.trophy {
+    font-size: 55px;
+    margin-bottom: 12px;
+}
+
+.result h2 {
+    color: #ffdc72;
+    margin-bottom: 12px;
+}
+
+.winner {
+    font-size: 28px;
+    font-weight: bold;
+    overflow-wrap: anywhere;
+    margin: 20px 0;
+}
+
+.close {
+    width: 100%;
+    padding: 14px;
+    border-radius: 13px;
+    background: linear-gradient(100deg, #ffdc72, #ff9bcf);
+    color: #17162b;
+}
+
+@media (max-width: 380px) {
+    .game { padding: 18px 12px; }
+    .wheel-area { padding: 9px; }
 }
 </style>
 </head>
+
 <body>
+
 <header>
-  <nav class="container">
-    <a href="#" class="logo">▶ PlayZone <span>Games</span></a>
-    <div class="navlinks">
-      <a href="#games" data-ar="الألعاب" data-en="Games">الألعاب</a>
-      <a href="#external" data-ar="استكشف" data-en="Explore">استكشف</a>
-      <a href="#about" data-ar="عن الموقع" data-en="About">عن الموقع</a>
-    </div>
-    <button class="lang" id="language">EN</button>
-  </nav>
+    <div class="logo">✦ PLAYZONE GAMES ✦</div>
+    <h1>عجلة الحظ</h1>
+    <p class="subtitle">أدر العجلة… ودع الحظ يختار الفائز! 🎯</p>
 </header>
-<main>
-<div class="container">
-  <section class="hero">
-    <div>
-      <span class="label" data-ar="منطقة اللعب تبدأ هنا" data-en="Your gaming zone starts here">منطقة اللعب تبدأ هنا</span>
-      <h1 data-ar-html="اكتشف لعبتك القادمة<br><span class='green'>واكسر الملل!</span>" data-en-html="Find your next game<br><span class='green'>Beat boredom!</span>">
-        اكتشف لعبتك القادمة<br><span class="green">واكسر الملل!</span>
-      </h1>
-      <p data-ar="ألعاب مجانية للمتصفح، تحدَّ ذكاءك واختبر سرعتك واستمتع باللعب من هاتفك." data-en="Free browser games. Challenge your brain, test your speed and play right from your phone.">ألعاب مجانية للمتصفح، تحدَّ ذكاءك واختبر سرعتك واستمتع باللعب من هاتفك.</p>
-      <a href="#games" class="btn primary" data-ar="🎮 تصفّح الألعاب" data-en="🎮 Browse Games">🎮 تصفّح الألعاب</a>
-      <a href="#external" class="btn secondary" data-ar="🌐 ألعاب أكثر" data-en="🌐 More Games">🌐 ألعاب أكثر</a>
-      <div class="stats">
-        <div class="stat"><strong>6+</strong><small data-ar="ألعاب مجانية" data-en="Free Games">ألعاب مجانية</small></div>
-        <div class="stat"><strong>📱</strong><small data-ar="مناسب للهاتف" data-en="Mobile Friendly">مناسب للهاتف</small></div>
-        <div class="stat"><strong>∞</strong><small data-ar="متعة بلا حدود" data-en="Endless Fun">متعة بلا حدود</small></div>
-      </div>
+
+<main class="game">
+
+    <div class="wheel-area">
+        <div class="pointer"></div>
+        <canvas id="wheel" width="700" height="700"></canvas>
+        <div class="center">★</div>
     </div>
-    <div class="hero-art">🎮</div>
-  </section>
-  <section id="games">
-    <div class="section-title">
-      <div>
-        <h2 data-ar="اختر لعبتك 🎯" data-en="Choose Your Game 🎯">اختر لعبتك 🎯</h2>
-      </div>
-      <input class="search" id="search" type="search" placeholder="ابحث عن لعبة..." data-ar-placeholder="ابحث عن لعبة..." data-en-placeholder="Search games...">
+
+    <button class="spin" id="spinBtn" onclick="spinWheel()">
+        🎡 أدر عجلة الحظ
+    </button>
+
+    <p class="status" id="status">أضف الأسماء ثم ابدأ الدوران</p>
+
+    <h3 class="section-title">✦ أسماء المشاركين</h3>
+
+    <textarea id="names" placeholder="اكتب اسم كل مشارك في سطر منفصل&#10;أحمد&#10;محمد&#10;علي&#10;سارة"></textarea>
+
+    <p class="hint">💡 اكتب كل اسم في سطر منفصل.</p>
+
+    <div class="actions">
+        <button class="update" onclick="updateNames()">تحديث الأسماء ✓</button>
+        <button class="clear" onclick="clearNames()">مسح الكل</button>
     </div>
-    <div class="categories">
-      <button class="chip active" data-cat="all" data-ar="الكل" data-en="All">الكل</button>
-      <button class="chip" data-cat="brain" data-ar="ذكاء" data-en="Brain">ذكاء</button>
-      <button class="chip" data-cat="speed" data-ar="سرعة" data-en="Speed">سرعة</button>
-      <button class="chip" data-cat="sports" data-ar="رياضة" data-en="Sports">رياضة</button>
-      <button class="chip" data-cat="classic" data-ar="كلاسيكية" data-en="Classic">كلاسيكية</button>
-    </div>
-    <div class="grid" id="gameGrid">
-      <article class="game" data-cat="brain" data-ar-name="خمن الرقم" data-en-name="Number Guess">
-        <div class="cover">🔢</div><div class="game-info">
-          <h3 data-ar="خمن الرقم" data-en="Number Guess">خمن الرقم</h3>
-          <p data-ar="اكتشف الرقم الصحيح خلال خمس محاولات." data-en="Guess the secret number in five tries.">اكتشف الرقم الصحيح خلال خمس محاولات.</p>
-          <button class="play" data-game="guess" data-ar="العب الآن ←" data-en="Play Now →">العب الآن ←</button>
-        </div>
-      </article>
-      <article class="game" data-cat="speed" data-ar-name="اختبار السرعة" data-en-name="Reaction Test">
-        <div class="cover blue">⚡</div><div class="game-info">
-          <h3 data-ar="اختبار السرعة" data-en="Reaction Test">اختبار السرعة</h3>
-          <p data-ar="اختبر سرعة استجابتك." data-en="Test how fast you react.">اختبر سرعة استجابتك.</p>
-          <button class="play" data-game="reaction" data-ar="العب الآن ←" data-en="Play Now →">العب الآن ←</button>
-        </div>
-      </article>
-      <article class="game" data-cat="classic" data-ar-name="حجر ورقة مقص" data-en-name="Rock Paper Scissors">
-        <div class="cover purple">✊</div><div class="game-info">
-          <h3 data-ar="حجر ورقة مقص" data-en="Rock Paper Scissors">حجر ورقة مقص</h3>
-          <p data-ar="تحدَّ الكمبيوتر في اللعبة الكلاسيكية." data-en="Challenge the computer in this classic game.">تحدَّ الكمبيوتر في اللعبة الكلاسيكية.</p>
-          <button class="play" data-game="rps" data-ar="العب الآن ←" data-en="Play Now →">العب الآن ←</button>
-        </div>
-      </article>
-      <article class="game" data-cat="brain" data-ar-name="تحدي الرياضيات" data-en-name="Math Challenge">
-        <div class="cover orange">🧠</div><div class="game-info">
-          <h3 data-ar="تحدي الرياضيات" data-en="Math Challenge">تحدي الرياضيات</h3>
-          <p data-ar="حل المسائل بأسرع ما تستطيع." data-en="Solve the problems as quickly as you can.">حل المسائل بأسرع ما تستطيع.</p>
-          <button class="play" data-game="math" data-ar="العب الآن ←" data-en="Play Now →">العب الآن ←</button>
-        </div>
-      </article>
-      <article class="game" data-cat="brain" data-ar-name="اختبار الذاكرة" data-en-name="Memory Match">
-        <div class="cover pink">🧩</div><div class="game-info">
-          <h3 data-ar="اختبار الذاكرة" data-en="Memory Match">اختبار الذاكرة</h3>
-          <p data-ar="اعثر على الرموز المتشابهة." data-en="Find the matching symbols.">اعثر على الرموز المتشابهة.</p>
-          <button class="play" data-game="memory" data-ar="العب الآن ←" data-en="Play Now →">العب الآن ←</button>
-        </div>
-      </article>
-      <article class="game" data-cat="sports" data-ar-name="ركلات الجزاء" data-en-name="Penalty Kicks">
-        <div class="cover teal">⚽</div><div class="game-info">
-          <h3 data-ar="ركلات الجزاء" data-en="Penalty Kicks">ركلات الجزاء</h3>
-          <p data-ar="اختر جهة التسديد وحاول تسجيل الهدف." data-en="Pick a direction and score a goal.">اختر جهة التسديد وحاول تسجيل الهدف.</p>
-          <button class="play" data-game="penalty" data-ar="العب الآن ←" data-en="Play Now →">العب الآن ←</button>
-        </div>
-      </article>
-      <a href="wheel.html" class="game-card">
-  <div class="game-icon">🎡</div>
-  <h3>عجلة الحظ</h3>
-  <p>أضف أسماء أصدقائك واكتشف الفائز!</p>
-  <span>العب الآن ←</span>
-</a>
-    </div>
-    <p id="empty" style="display:none;color:var(--muted)" data-ar="لا توجد ألعاب مطابقة." data-en="No matching games found.">لا توجد ألعاب مطابقة.</p>
-  </section>
-  <div class="ad-space">
-    <span data-ar="مساحة إعلانية — أضف كود الإعلان بعد قبول الموقع في AdSense" data-en="Ad space — add your ad code after AdSense approval">مساحة إعلانية — أضف كود الإعلان بعد قبول الموقع في AdSense</span>
-  </div>
-  <section id="external">
-    <div class="section-title"><h2 data-ar="اكتشف ألعابًا أكثر 🌍" data-en="Explore More Games 🌍">اكتشف ألعابًا أكثر 🌍</h2></div>
-    <div class="external-grid">
-      <div class="external"><h3>🕹️ Poki</h3><p data-ar="مجموعة كبيرة من ألعاب المتصفح." data-en="A huge collection of browser games.">مجموعة كبيرة من ألعاب المتصفح.</p><a href="https://poki.com/" target="_blank" rel="noopener">افتح الموقع ↗</a></div>
-      <div class="external"><h3>🎯 CrazyGames</h3><p data-ar="ألعاب سباق وأكشن ومغامرات." data-en="Racing, action and adventure games.">ألعاب سباق وأكشن ومغامرات.</p><a href="https://www.crazygames.com/" target="_blank" rel="noopener">افتح الموقع ↗</a></div>
-      <div class="external"><h3>🎮 GamePix</h3><p data-ar="ألعاب متنوعة للأجهزة المختلفة." data-en="Games for different devices.">ألعاب متنوعة للأجهزة المختلفة.</p><a href="https://www.gamepix.com/" target="_blank" rel="noopener">افتح الموقع ↗</a></div>
-    </div>
-  </section>
-  <section id="about">
-    <h2 data-ar="عن PlayZone Games" data-en="About PlayZone Games">عن PlayZone Games</h2>
-    <p style="color:var(--muted)" data-ar="موقع تجريبي للألعاب المجانية يضم ألعابًا مصغّرة وروابط لمنصات خارجية. نعمل على تطوير تجربة ممتعة وسهلة الاستخدام على الهاتف والكمبيوتر." data-en="A demo gaming website featuring free mini-games and links to external platforms, designed for easy use on mobile and desktop.">موقع تجريبي للألعاب المجانية يضم ألعابًا مصغّرة وروابط لمنصات خارجية. نعمل على تطوير تجربة ممتعة وسهلة الاستخدام على الهاتف والكمبيوتر.</p>
-  </section>
-</div>
+
 </main>
-<footer>
-  <div class="container footer-row">
-    <strong>▶ PlayZone <span class="green">Games</span></strong>
-    <span>© 2026 PlayZone Games</span>
-    <a href="#about" data-ar="عن الموقع" data-en="About">عن الموقع</a>
-  </div>
-</footer>
+
+<footer>PLAYZONE · LET THE LUCK DECIDE</footer>
+
 <div class="modal" id="modal">
-  <div class="modal-box">
-    <div class="modal-top"><h2 id="modalTitle">اللعبة</h2><button class="close" id="close">×</button></div>
-    <div id="gameArea"></div>
-  </div>
+    <div class="result">
+        <div class="trophy">🏆</div>
+        <h2>مبروك للفائز!</h2>
+        <div class="winner" id="winner"></div>
+        <button class="close" onclick="closeModal()">رائع! ✨</button>
+    </div>
 </div>
+
 <script>
-let lang="ar";
-const tr=(ar,en)=>lang==="ar"?ar:en;
-function switchLanguage(){
-  lang=lang==="ar"?"en":"ar";
-  document.documentElement.lang=lang;
-  document.documentElement.dir=lang==="ar"?"rtl":"ltr";
-  document.getElementById("language").textContent=lang==="ar"?"EN":"عربي";
-  document.querySelectorAll("[data-ar][data-en]").forEach(el=>{
-    el.textContent=el.dataset[lang];
-  });
-  document.querySelectorAll("[data-ar-html][data-en-html]").forEach(el=>{
-    el.innerHTML=el.dataset[lang+"Html"];
-  });
-  document.querySelectorAll("[data-ar-placeholder][data-en-placeholder]").forEach(el=>{
-    el.placeholder=el.dataset[lang+"Placeholder"];
-  });
-  document.querySelectorAll("[data-game]").forEach(el=>{
-    if(el.classList.contains("play"))el.textContent=tr("العب الآن ←","Play Now →");
-  });
-  document.title=tr("PlayZone Games | ألعاب مجانية","PlayZone Games | Free Games");
-  filterGames();
+const canvas = document.getElementById("wheel");
+const ctx = canvas.getContext("2d");
+const namesBox = document.getElementById("names");
+const spinBtn = document.getElementById("spinBtn");
+const statusText = document.getElementById("status");
+
+const colors = [
+    "#ff6482", "#7667ff", "#ffb84d", "#22c8b8",
+    "#f06bc0", "#4c9cff", "#a5d957", "#ff8059",
+    "#9b7bff", "#f3c95b", "#40c9e5", "#ef7197"
+];
+
+let names = ["أحمد", "محمد", "علي", "سارة", "خالد", "نور"];
+let rotation = 0;
+let spinning = false;
+
+namesBox.value = names.join("\n");
+
+function drawWheel() {
+    const cx = canvas.width / 2;
+    const cy = canvas.height / 2;
+    const radius = 335;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    if (names.length === 0) {
+        ctx.beginPath();
+        ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+        ctx.fillStyle = "#303858";
+        ctx.fill();
+
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "bold 32px Arial";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("أضف أسماءك", cx, cy);
+        return;
+    }
+
+    const slice = (Math.PI * 2) / names.length;
+
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(rotation);
+
+    names.forEach((name, i) => {
+        const start = i * slice;
+        const end = start + slice;
+
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.arc(0, 0, radius, start, end);
+        ctx.closePath();
+        ctx.fillStyle = colors[i % colors.length];
+        ctx.fill();
+
+        ctx.strokeStyle = "rgba(255,255,255,.7)";
+        ctx.lineWidth = 3;
+        ctx.stroke();
+
+        ctx.save();
+        ctx.rotate(start + slice / 2);
+
+        ctx.textAlign = "right";
+        ctx.textBaseline = "middle";
+        ctx.fillStyle = "#ffffff";
+        ctx.shadowColor = "rgba(0,0,0,.3)";
+        ctx.shadowBlur = 4;
+
+        let fontSize = names.length > 15 ? 19 :
+                       names.length > 9 ? 23 : 28;
+
+        ctx.font = `bold ${fontSize}px Arial`;
+
+        let displayName = name;
+        while (ctx.measureText(displayName).width > radius * .66 &&
+               displayName.length > 2) {
+            displayName = displayName.slice(0, -1);
+        }
+
+        if (displayName !== name) displayName += "…";
+
+        ctx.fillText(displayName, radius - 25, 0);
+        ctx.restore();
+    });
+
+    ctx.restore();
+
+    ctx.beginPath();
+    ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+    ctx.strokeStyle = "#ffffff";
+    ctx.lineWidth = 7;
+    ctx.stroke();
 }
-document.getElementById("language").addEventListener("click",switchLanguage);
-let category="all";
-function filterGames(){
-  const q=document.getElementById("search").value.toLowerCase().trim();
-  let count=0;
-  document.querySelectorAll(".game").forEach(card=>{
-    const name=(lang==="ar"?card.dataset.arName:card.dataset.enName).toLowerCase();
-    const show=(category==="all"||card.dataset.cat===category)&&(!q||name.includes(q));
-    card.style.display=show?"":"none";
-    if(show)count++;
-  });
-  document.getElementById("empty").style.display=count?"none":"block";
+
+function updateNames() {
+    if (spinning) return;
+
+    const entered = namesBox.value
+        .split("\n")
+        .map(n => n.trim())
+        .filter(n => n.length > 0);
+
+    if (entered.length < 2) {
+        statusText.textContent = "⚠️ أدخل اسمين على الأقل للبدء.";
+        return;
+    }
+
+    names = entered;
+    rotation = 0;
+    drawWheel();
+
+    statusText.textContent = `تم تجهيز العجلة بـ ${names.length} مشاركًا ✓`;
 }
-document.getElementById("search").addEventListener("input",filterGames);
-document.querySelectorAll(".chip").forEach(btn=>btn.addEventListener("click",()=>{
-  document.querySelectorAll(".chip").forEach(b=>b.classList.remove("active"));
-  btn.classList.add("active");category=btn.dataset.cat;filterGames();
-}));
-const modal=document.getElementById("modal"),area=document.getElementById("gameArea"),title=document.getElementById("modalTitle");
-document.getElementById("close").onclick=()=>modal.classList.remove("open");
-modal.addEventListener("click",e=>{if(e.target===modal)modal.classList.remove("open")});
-document.addEventListener("keydown",e=>{if(e.key==="Escape")modal.classList.remove("open")});
-const btn=(label,fn)=>{const b=document.createElement("button");b.className="btn primary";b.textContent=label;b.onclick=fn;return b};
-const para=text=>{const p=document.createElement("p");p.textContent=text;return p};
-const result=()=>{const d=document.createElement("div");d.className="result";return d};
-function launchGame(type){
-  area.innerHTML="";
-  modal.classList.add("open");
-  const games={guess:numberGame,reaction:reactionGame,rps:rpsGame,math:mathGame,memory:memoryGame,penalty:penaltyGame};
-  title.textContent=({
-    guess:tr("خمن الرقم","Number Guess"),reaction:tr("اختبار السرعة","Reaction Test"),
-    rps:tr("حجر ورقة مقص","Rock Paper Scissors"),math:tr("تحدي الرياضيات","Math Challenge"),
-    memory:tr("اختبار الذاكرة","Memory Match"),penalty:tr("ركلات الجزاء","Penalty Kicks")
-  })[type];
-  games[type]();
+
+function clearNames() {
+    if (spinning) return;
+
+    names = [];
+    namesBox.value = "";
+    rotation = 0;
+    drawWheel();
+
+    statusText.textContent = "تم مسح الأسماء. أضف أسماء جديدة.";
 }
-document.querySelectorAll(".play").forEach(b=>b.addEventListener("click",()=>launchGame(b.dataset.game)));
-function numberGame(){
-  const hint=para(tr("اختر رقمًا بين 1 و20. لديك 5 محاولات.","Guess a number from 1 to 20. You have 5 tries."));
-  const input=document.createElement("input");input.type="number";input.min=1;input.max=20;
-  input.placeholder=tr("رقم","Number");
-  const check=btn(tr("تحقّق","Check"),guess);
-  const msg=result();let secret=Math.floor(Math.random()*20)+1,tries=5,done=false;
-  area.append(hint,input,check,msg);
-  function guess(){
-    const n=Number(input.value);
-    if(!input.value||n<1||n>20){msg.textContent=tr("أدخل رقمًا بين 1 و20.","Enter a number from 1 to 20.");return}
-    if(done)return;
-    tries--;
-    if(n===secret){msg.textContent=tr("أحسنت! عرفت الرقم 🎉","Correct! You guessed it 🎉");done=true;check.disabled=true}
-    else if(tries===0){msg.textContent=tr("انتهت المحاولات. الرقم هو ","Out of tries. The number was ")+secret;done=true;check.disabled=true}
-    else msg.textContent=(n<secret?tr("الرقم أكبر ↑","Higher ↑"):tr("الرقم أصغر ↓","Lower ↓"))+" · "+tr("المحاولات المتبقية: ","Tries left: ")+tries;
-    input.value="";
-  }
-  input.addEventListener("keydown",e=>{if(e.key==="Enter")guess()});
+
+function spinWheel() {
+    if (spinning) return;
+
+    if (names.length < 2) {
+        statusText.textContent = "⚠️ أضف اسمين على الأقل واضغط تحديث الأسماء.";
+        return;
+    }
+
+    spinning = true;
+    spinBtn.disabled = true;
+    statusText.textContent = "🎡 العجلة تدور… من سيكون الفائز؟";
+
+    const slice = (Math.PI * 2) / names.length;
+    const winnerIndex = Math.floor(Math.random() * names.length);
+
+    // تحديد الاسم المختار تحت المؤشر الموجود أعلى العجلة
+    const targetAngle = (
+        Math.PI * 1.5 -
+        (winnerIndex * slice + slice / 2)
+    );
+
+    const current = ((rotation % (Math.PI * 2)) + Math.PI * 2)
+                    % (Math.PI * 2);
+
+    let delta = targetAngle - current;
+    delta = ((delta % (Math.PI * 2)) + Math.PI * 2)
+            % (Math.PI * 2);
+
+    const extraTurns = 6 + Math.floor(Math.random() * 4);
+    const startRotation = rotation;
+    const totalRotation = extraTurns * Math.PI * 2 + delta;
+    const duration = 4800;
+    const startTime = performance.now();
+
+    function animate(now) {
+        const progress = Math.min((now - startTime) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 5);
+
+        rotation = startRotation + totalRotation * eased;
+        drawWheel();
+
+        if (progress < 1) {
+            requestAnimationFrame(animate);
+        } else {
+            rotation = ((rotation % (Math.PI * 2)) + Math.PI * 2)
+                       % (Math.PI * 2);
+
+            drawWheel();
+
+            spinning = false;
+            spinBtn.disabled = false;
+
+            const winnerName = names[winnerIndex];
+            document.getElementById("winner").textContent = winnerName;
+            document.getElementById("modal").classList.add("show");
+            statusText.textContent = `🏆 الفائز هو: ${winnerName}`;
+        }
+    }
+
+    requestAnimationFrame(animate);
 }
-function reactionGame(){
-  area.append(para(tr("اضغط ابدأ وانتظر حتى يتحول الزر إلى الأخضر، ثم اضغط بسرعة.","Press start, wait for green, then tap as quickly as you can.")));
-  const zone=btn(tr("ابدأ الاختبار","Start Test"),start),msg=result();zone.style.width="100%";zone.style.minHeight="110px";area.append(zone,msg);
-  let state="idle",timer,startAt;
-  function start(){clearTimeout(timer);state="wait";zone.textContent=tr("انتظر...","Wait...");zone.style.background="#8b5b13";msg.textContent="";
-    timer=setTimeout(()=>{if(state==="wait"){state="go";startAt=performance.now();zone.textContent=tr("اضغط الآن!","TAP NOW!");zone.style.background="#a3ff12"}},1000+Math.random()*2500)}
-  zone.onclick=()=>{if(state==="idle")start();else if(state==="wait"){clearTimeout(timer);state="idle";zone.style.background="";zone.textContent=tr("ابدأ مجددًا","Try Again");msg.textContent=tr("ضغطت مبكرًا!","Too early!")}else{msg.textContent=tr("زمن استجابتك: ","Reaction time: ")+Math.round(performance.now()-startAt)+tr(" مللي ثانية"," ms");state="idle";zone.style.background="";zone.textContent=tr("ابدأ مجددًا","Try Again")}};
+
+function closeModal() {
+    document.getElementById("modal").classList.remove("show");
 }
-function rpsGame(){
-  area.append(para(tr("اختر حركتك:","Choose your move:")));
-  const msg=result();area.append(msg);
-  const choices=["rock","paper","scissors"];
-  const labels={rock:tr("✊ حجر","✊ Rock"),paper:tr("✋ ورقة","✋ Paper"),scissors:tr("✌️ مقص","✌️ Scissors")};
-  choices.forEach(user=>area.append(btn(labels[user],()=>{
-    const cpu=choices[Math.floor(Math.random()*3)];
-    const win=(user==="rock"&&cpu==="scissors")||(user==="paper"&&cpu==="rock")||(user==="scissors"&&cpu==="paper");
-    msg.textContent=tr("أنت: ","You: ")+labels[user]+" | "+tr("الكمبيوتر: ","Computer: ")+labels[cpu]+" — "+(user===cpu?tr("تعادل!","Draw!"):win?tr("فزت! 🎉","You win! 🎉"):tr("خسرت هذه الجولة.","You lost this round."));
-  })));
-}
-function mathGame(){
-  area.append(para(tr("حل أكبر عدد من المسائل خلال 30 ثانية.","Solve as many problems as possible in 30 seconds.")));
-  const start=btn(tr("ابدأ التحدي","Start Challenge"),begin),question=document.createElement("h2"),input=document.createElement("input"),send=btn(tr("إرسال","Submit"),check),msg=result();
-  input.type="number";input.placeholder=tr("الإجابة","Answer");area.append(start,question,input,send,msg);
-  let score=0,time=30,answer=0,active=false,interval;
-  function newQuestion(){let a=Math.floor(Math.random()*10)+1,b=Math.floor(Math.random()*10)+1;answer=a+b;question.textContent=`${a} + ${b} = ?`;input.value=""}
-  function begin(){score=0;time=30;active=true;start.disabled=true;newQuestion();input.focus();msg.textContent=tr("الوقت: ","Time: ")+time;interval=setInterval(()=>{time--;msg.textContent=tr("النقاط: ","Score: ")+score+" · "+tr("الوقت: ","Time: ")+time;if(time<=0){clearInterval(interval);active=false;start.disabled=false;question.textContent=tr("انتهى الوقت!","Time's up!");msg.textContent=tr("نتيجتك: ","Your score: ")+score}},1000)}
-  function check(){if(!active||input.value==="")return;if(Number(input.value)===answer)score++;newQuestion();msg.textContent=tr("النقاط: ","Score: ")+score+" · "+tr("الوقت: ","Time: ")+time}
-  input.addEventListener("keydown",e=>{if(e.key==="Enter")check()});
-}
-function memoryGame(){
-  area.append(para(tr("اكشف البطاقات واعثر على الأزواج المتشابهة.","Flip the cards and find matching pairs.")));
-  const symbols=["🍉","🚀","⚽","🐱","🎧","🍕","🌟","🚗"],deck=[...symbols,...symbols].sort(()=>Math.random()-.5);
-  const grid=document.createElement("div");grid.style.cssText="display:grid;grid-template-columns:repeat(4,1fr);gap:8px";
-  const msg=result();area.append(grid,msg);let opened=[],matched=0,moves=0,locked=false;
-  deck.forEach((symbol,i)=>{const b=btn("?",()=>flip(i));b.style.cssText="margin:0;padding:12px 0;font-size:22px";grid.append(b)});
-  function flip(i){if(locked)return;const b=grid.children[i];if(b.dataset.open||b.dataset.done)return;b.dataset.open="1";b.textContent=deck[i];opened.push(i);
-    if(opened.length===2){moves++;const [a,c]=opened;if(deck[a]===deck[c]){[a,c].forEach(k=>{grid.children[k].dataset.done="1"});matched+=2;opened=[];if(matched===deck.length)msg.textContent=tr("أحسنت! أنهيت اللعبة في ","Great! Completed in ")+moves+tr(" محاولة"," moves")}else{locked=true;setTimeout(()=>{[a,c].forEach(k=>{grid.children[k].textContent="?";delete grid.children[k].dataset.open});opened=[];locked=false},650)}msg.textContent=matched===deck.length?tr("أحسنت! أنهيت اللعبة في ","Great! Completed in ")+moves:tr("عدد المحاولات: ","Moves: ")+moves}}
-}
-function penaltyGame(){
-  area.append(para(tr("اختر جهة التسديد. الحارس سيحاول التصدي للكرة.","Choose where to shoot. The goalkeeper will try to save it.")));
-  const msg=result(),score=para(tr("الأهداف: 0","Goals: 0"));area.append(score);
-  let goals=0,kicks=0;
-  [["left","⬅️ يسار","⬅️ Left"],["center","⬆️ وسط","⬆️ Center"],["right","➡️ يمين","➡️ Right"]].forEach(([dir,ar,en])=>area.append(btn(tr(ar,en),()=>{
-    kicks++;const keeper=["left","center","right"][Math.floor(Math.random()*3)];
-    if(dir!==keeper){goals++;msg.textContent=tr("هدف! ⚽","Goal! ⚽")}else msg.textContent=tr("تصدى الحارس! 🧤","Saved! 🧤");
-    score.textContent=tr("الأهداف: ","Goals: ")+goals+" / "+kicks;
-  })));
-}
+
+document.getElementById("modal").addEventListener("click", function(e) {
+    if (e.target === this) closeModal();
+});
+
+drawWheel();
 </script>
+
 </body>
 </html>
